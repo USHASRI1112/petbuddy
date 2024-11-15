@@ -21,6 +21,7 @@ const TestComponent: React.FC = () => {
                                 about: 'Me',
                                 email: 'usha@gmail.com',
                                 contact: '1234567890',
+                                image_uri:'',
                                 pets: [],
                             })
                         }
