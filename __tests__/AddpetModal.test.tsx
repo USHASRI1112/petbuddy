@@ -3,6 +3,38 @@ import {API_URL} from '../API';
 import AddPetModal from '../src/components/AddPetModal';
 import {fireEvent, render, waitFor} from '@testing-library/react-native';
 
+
+jest.mock('react-native-permissions', () => ({
+  check: jest.fn(() => Promise.resolve('granted')),
+  request: jest.fn(() => Promise.resolve('granted')),
+  PERMISSIONS: {
+    IOS: {
+      PHOTO_LIBRARY: 'ios.permission.PHOTO_LIBRARY',
+    },
+  },
+  RESULTS: {
+    GRANTED: 'granted',
+    DENIED: 'denied',
+    BLOCKED: 'blocked',
+  },
+}));
+
+jest.mock('react-native-image-crop-picker', () => ({
+  openPicker: jest.fn(() => Promise.resolve({ path: '/mock/path', mime: 'image/jpeg' })),
+  openCamera: jest.fn(() => Promise.resolve({ path: '/mock/path', mime: 'image/jpeg' })),
+  clean: jest.fn(() => Promise.resolve()),
+  cleanSingle: jest.fn(() => Promise.resolve()),
+}));
+jest.mock('react-native-fs', () => ({
+  // readDir: jest.fn(() => Promise.resolve([])),
+  // readFile: jest.fn(() => Promise.resolve('mocked file content')),
+  // writeFile: jest.fn(() => Promise.resolve()),
+  // unlink: jest.fn(() => Promise.resolve()),
+  // mkdir: jest.fn(() => Promise.resolve()),
+  // moveFile: jest.fn(() => Promise.resolve()),
+}));
+
+
 describe('Test for Modal', () => {
   it('Should render all the text inputs', () => {
     const {getByPlaceholderText} = render(
@@ -98,6 +130,8 @@ describe('Test for inserting data', () => {
       height: '10',
       color: 'red',
       remarks: 'Hello',
+      image_uri:'',
+      emergencyContact:"123456789"
     };
     (fetch as jest.Mock).mockResolvedValue({
       status: 201,
@@ -112,6 +146,9 @@ describe('Test for inserting data', () => {
     fireEvent.changeText(getByPlaceholderText('Height'), mockPet.height);
     fireEvent.changeText(getByPlaceholderText('Weight'), mockPet.weight);
     fireEvent.changeText(getByPlaceholderText('Colour'), mockPet.color);
+    fireEvent.changeText(getByPlaceholderText('Contact'), mockPet.emergencyContact);
+    fireEvent.changeText(getByPlaceholderText('Colour'), mockPet.color);
+
     fireEvent.changeText(
       getByPlaceholderText('Remarks(Optional)'),
       mockPet.remarks,
@@ -150,6 +187,8 @@ describe('Test for inserting data', () => {
       height: '10',
       color: 'red',
       remarks: 'Hello',
+      image_uri:'',
+      emergencyContact:"123456789"
     };
     (fetch as jest.Mock).mockResolvedValue({
       status: 404,
@@ -163,6 +202,9 @@ describe('Test for inserting data', () => {
     fireEvent.changeText(getByPlaceholderText('Height'), mockPet.height);
     fireEvent.changeText(getByPlaceholderText('Weight'), mockPet.weight);
     fireEvent.changeText(getByPlaceholderText('Colour'), mockPet.color);
+    fireEvent.changeText(getByPlaceholderText('Contact'), mockPet.emergencyContact);
+    fireEvent.changeText(getByPlaceholderText('Colour'), mockPet.color);
+
     fireEvent.changeText(
       getByPlaceholderText('Remarks(Optional)'),
       mockPet.remarks,
@@ -201,6 +243,8 @@ describe('Test for inserting data', () => {
       height: '10',
       color: 'red',
       remarks: 'Hello',
+      image_uri:'',
+      emergencyContact:"123456789"
     };
     (fetch as jest.Mock).mockRejectedValue(new Error("Data base error"));
     const {getByPlaceholderText, getByTestId} = render(
@@ -211,6 +255,8 @@ describe('Test for inserting data', () => {
     fireEvent.changeText(getByPlaceholderText('Age'), mockPet.age);
     fireEvent.changeText(getByPlaceholderText('Height'), mockPet.height);
     fireEvent.changeText(getByPlaceholderText('Weight'), mockPet.weight);
+    fireEvent.changeText(getByPlaceholderText('Colour'), mockPet.color);
+    fireEvent.changeText(getByPlaceholderText('Contact'), mockPet.emergencyContact);
     fireEvent.changeText(getByPlaceholderText('Colour'), mockPet.color);
     fireEvent.changeText(
       getByPlaceholderText('Remarks(Optional)'),
