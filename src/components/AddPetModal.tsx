@@ -99,10 +99,10 @@ const AddPetModal = ({visible, closeFn,username}: {visible: boolean; closeFn: an
           <Text style={styles.header}>Enter Pet Details</Text>
           <TouchableOpacity style={styles.imageContainer} onPress={()=>handleImage()}>
             {!photo?
-            <Image
+            <Image  testID ="image-select"
               style={styles.profileImage}
               source={require('./../../public/assets/Register/profile.png')}
-            />:<Image style={styles.profileImage} source={{uri:photo}} />}
+            />:<Image testID ="image-select" style={styles.profileImage} source={{uri:photo}} />}
             <Text>Upload Profile Pic</Text>
           </TouchableOpacity>
           <View style={styles.bottomContainer}>
