@@ -2,8 +2,15 @@ import React from 'react';
 import {render, fireEvent, waitFor} from '@testing-library/react-native';
 import Register from '../src/screens/Register/RegisterScreen';
 import {NavigationContainer} from '@react-navigation/native';
+import {API_URL} from '../API';
+import {Alert, Platform} from 'react-native';
 
+global.fetch = jest.fn();
+Alert.alert = jest.fn();
 describe('Register Component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   it('renders all input fields correctly', () => {
     const {getByPlaceholderText} = render(
       <NavigationContainer>
@@ -35,8 +42,10 @@ describe('Register Component', () => {
   });
 
   it('should update input fields with specified values', () => {
-    const mockNavigation = jest.fn()
-    const { getByPlaceholderText } = render(<Register navigation={mockNavigation} />);
+    const mockNavigation = jest.fn();
+    const {getByPlaceholderText} = render(
+      <Register navigation={mockNavigation} />,
+    );
     fireEvent.changeText(getByPlaceholderText('User name'), 'Usha');
     fireEvent.changeText(getByPlaceholderText('Password'), '1234');
     fireEvent.changeText(getByPlaceholderText('Confirm Password'), '1234');
@@ -52,6 +61,130 @@ describe('Register Component', () => {
     expect(getByPlaceholderText('Contact').props.value).toBe('12345678');
     expect(getByPlaceholderText('About you').props.value).toBe('I love pets');
     expect(getByPlaceholderText('Adress').props.value).toBe('wgl');
-  });  
-});
+  });
 
+  it('should trigger handle register function', async () => {
+    const mockNavigation = {replace: jest.fn()};
+    const {getByTestId, getByPlaceholderText, getByText} = render(
+      <Register navigation={mockNavigation} />,
+    );
+
+    (fetch as jest.Mock).mockResolvedValue({
+      status: 201,
+    });
+
+    const mockData = {
+      name: 'Usha',
+      password: '1234',
+      address: 'wgl',
+      about: 'I love pets',
+      email: 'usha@gmail.com',
+      contact: '1234567890',
+      image_uri: '',
+      pets: [],
+    };
+
+    fireEvent.changeText(getByPlaceholderText('User name'), 'Usha');
+    fireEvent.changeText(getByPlaceholderText('Password'), '1234');
+    fireEvent.changeText(getByPlaceholderText('Confirm Password'), '1234');
+    fireEvent.changeText(getByPlaceholderText('Email'), 'usha@gmail.com');
+    fireEvent.changeText(getByPlaceholderText('Contact'), '1234567890');
+    fireEvent.changeText(getByPlaceholderText('About you'), 'I love pets');
+    fireEvent.changeText(getByPlaceholderText('Adress'), 'wgl');
+    const registerButton = getByText('REGISTER');
+    fireEvent.press(registerButton);
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalled();
+      expect(fetch).toHaveBeenCalledWith(`${API_URL}users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(mockData),
+      });
+      expect(Alert.alert).toHaveBeenCalledWith('Registration Success');
+      expect(mockNavigation.replace).toHaveBeenCalledWith('Loader');
+      
+    });
+    await waitFor(()=>{
+      expect(mockNavigation.replace).toHaveBeenCalledWith('Login');
+    })
+  });
+
+  it('should fail as password and confirm password mismatch', async () => {
+    const mockNavigation = {replace: jest.fn()};
+    const {getByTestId, getByPlaceholderText, getByText} = render(
+      <Register navigation={mockNavigation} />,
+    );
+
+    fireEvent.changeText(getByPlaceholderText('User name'), 'Usha');
+    fireEvent.changeText(getByPlaceholderText('Password'), '1234');
+    fireEvent.changeText(getByPlaceholderText('Confirm Password'), '12345');
+
+    const registerButton = getByText('REGISTER');
+    fireEvent.press(registerButton);
+    await waitFor(() => {
+      expect(Alert.alert).toHaveBeenCalledWith(
+        'Pasword and confirm password mismatch',
+      );
+    });
+  });
+
+  it('should trigger handle register function', async () => {
+    const mockNavigation = {replace: jest.fn()};
+    const {getByTestId, getByPlaceholderText, getByText} = render(
+      <Register navigation={mockNavigation} />,
+    );
+
+    (fetch as jest.Mock).mockResolvedValue({
+      status: 400,
+    });
+
+    const mockData = {
+      name: 'Usha',
+      password: '1234',
+      address: 'wgl',
+      about: 'I love pets',
+      email: 'usha@gmail.com',
+      contact: '1234567890',
+      image_uri: '',
+      pets: [],
+    };
+
+    fireEvent.changeText(getByPlaceholderText('User name'), 'Usha');
+    fireEvent.changeText(getByPlaceholderText('Password'), '1234');
+    fireEvent.changeText(getByPlaceholderText('Confirm Password'), '1234');
+    fireEvent.changeText(getByPlaceholderText('Email'), 'usha@gmail.com');
+    fireEvent.changeText(getByPlaceholderText('Contact'), '1234567890');
+    fireEvent.changeText(getByPlaceholderText('About you'), 'I love pets');
+    fireEvent.changeText(getByPlaceholderText('Adress'), 'wgl');
+    const registerButton = getByText('REGISTER');
+    fireEvent.press(registerButton);
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalled();
+      expect(fetch).toHaveBeenCalledWith(`${API_URL}users`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(mockData),
+      });
+      expect(Alert.alert).toHaveBeenCalledWith('Registration failed');
+    });
+  });
+
+  it("should throw error",async()=>{
+    const mockNavigation = {replace: jest.fn()};
+    const {getByTestId, getByPlaceholderText, getByText} = render(
+      <Register navigation={mockNavigation} />,
+    );
+
+    (fetch as jest.Mock).mockRejectedValue(new Error("API NOT FOUND"));
+    const registerButton = getByText('REGISTER');
+    fireEvent.press(registerButton);
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalled();
+      expect(Alert.alert).toHaveBeenCalledWith('Error registering user: Error: API NOT FOUND');
+    });
+  })
+});
