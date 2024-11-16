@@ -42,7 +42,7 @@ const Register = ({navigation}: {navigation: any}) => {
         }),
       });
       if (response.status===201) {
-        navigation.replace('Loader');
+        navigation.replace('Loading');
         Alert.alert("Registration Success");
         setTimeout(()=>{
           navigation.replace('Login')
