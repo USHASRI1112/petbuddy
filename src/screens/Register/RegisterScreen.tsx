@@ -42,7 +42,7 @@ const Register = ({navigation}: {navigation: any}) => {
         }),
       });
       if (response.status===201) {
-        navigation.replace('Login');
+        navigation.replace('Loader');
         Alert.alert("Registration Success");
         setTimeout(()=>{
           navigation.replace('Login')
@@ -51,7 +51,7 @@ const Register = ({navigation}: {navigation: any}) => {
         Alert.alert('Registration failed');
       }
     } catch (error) {
-      console.error('Error registering user:', error);
+      Alert.alert(`Error registering user: ${error}`);
     }
   };
 
@@ -137,7 +137,7 @@ const Register = ({navigation}: {navigation: any}) => {
           <Text style={styles.petText}>Pet</Text>
           <Text style={styles.buddyText}>Buddy!</Text>
         </View>
-        <Text style={styles.rightsText}>
+        <Text style={styles.rightsText} >
           ©️All Rights Reserved to PetBuddy - 2024
         </Text>
       </View>
