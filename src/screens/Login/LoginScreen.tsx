@@ -41,10 +41,10 @@ const Login = ({navigation}: {navigation: any}) => {
         const user = await response.json();
         await AsyncStorage.setItem('loggedInUser', JSON.stringify(user));
         setUser(user);
-        navigation.replace('Loading'); // Show Loading screen immediately
+        navigation.replace('Loading'); 
 
         setTimeout(() => {
-          navigation.replace('Home'); // Replace Loading with Home after a delay
+          navigation.replace('Home'); 
         }, 1000);
       } else if (response.status === 404) {
         Alert.alert('User Details not found');
