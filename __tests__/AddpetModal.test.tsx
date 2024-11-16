@@ -2,7 +2,9 @@ import {Alert} from 'react-native';
 import {API_URL} from '../API';
 import AddPetModal from '../src/components/AddPetModal';
 import {fireEvent, render, waitFor} from '@testing-library/react-native';
-
+import * as Permissions from './../src/components/Permissions'
+import ImageCropPicker from 'react-native-image-crop-picker';
+import RNFS from 'react-native-fs';
 
 jest.mock('react-native-permissions', () => ({
   check: jest.fn(() => Promise.resolve('granted')),
@@ -26,16 +28,20 @@ jest.mock('react-native-image-crop-picker', () => ({
   cleanSingle: jest.fn(() => Promise.resolve()),
 }));
 jest.mock('react-native-fs', () => ({
-  // readDir: jest.fn(() => Promise.resolve([])),
-  // readFile: jest.fn(() => Promise.resolve('mocked file content')),
-  // writeFile: jest.fn(() => Promise.resolve()),
-  // unlink: jest.fn(() => Promise.resolve()),
-  // mkdir: jest.fn(() => Promise.resolve()),
-  // moveFile: jest.fn(() => Promise.resolve()),
+  readDir: jest.fn(() => Promise.resolve([])),
+  readFile: jest.fn(() => Promise.resolve('mocked file content')),
+  writeFile: jest.fn(() => Promise.resolve()),
+  unlink: jest.fn(() => Promise.resolve()),
+  mkdir: jest.fn(() => Promise.resolve()),
+  moveFile: jest.fn(() => Promise.resolve()),
+}));
+
+jest.mock('./../src/components/Permissions', () => ({
+  requestPhotoLibraryPermission: jest.fn(),
 }));
 
 
-describe('Test for Modal', () => {
+describe('Test for Add pet Modal', () => {
   it('Should render all the text inputs', () => {
     const {getByPlaceholderText} = render(
       <AddPetModal visible={true} closeFn={jest.fn()} username="Usha" />,
@@ -286,3 +292,109 @@ describe('Test for inserting data', () => {
     })
   });
 });
+
+describe("Test for adding profile image",()=>{
+  describe('AddPetModal Component', () => {
+    const mockCloseFn = jest.fn();
+    const mockUsername = 'testUser';
+  
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+  
+    it('should call handleImage and set photo when permission is granted and image is picked', async () => {
+      const mockImagePath = 'path.jpg';
+      const mockBase64Image = 'Base64EncodedImage';
+  
+      (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
+        true
+      );
+      (ImageCropPicker.openPicker as jest.Mock).mockResolvedValue({
+        path: mockImagePath,
+      });
+      (RNFS.readFile as jest.Mock).mockResolvedValue(mockBase64Image);
+  
+      const { getByText, getByTestId } = render(
+        <AddPetModal visible={true} closeFn={mockCloseFn} username={mockUsername} />
+      );
+  
+      const uploadButton = getByText('Upload Profile Pic');
+      fireEvent.press(uploadButton);
+  
+      await waitFor(() => {
+        expect(Permissions.requestPhotoLibraryPermission).toHaveBeenCalledTimes(1);
+        expect(ImageCropPicker.openPicker).toHaveBeenCalledWith({
+          width: 300,
+          height: 400,
+          cropping: true,
+        });
+        expect(RNFS.readFile).toHaveBeenCalledWith(mockImagePath, 'base64');
+      });
+  
+      const profileImage = getByTestId("image-select")
+      expect(profileImage.props.source).toEqual({
+        uri: `data:image/jpeg;base64,${mockBase64Image}`,
+      });
+    });
+  
+    it('should show an alert if permission is not granted', async () => {
+      (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
+        false
+      );
+  
+      const { getByText } = render(
+        <AddPetModal visible={true} closeFn={mockCloseFn} username={mockUsername} />
+      );
+  
+      const uploadButton = getByText('Upload Profile Pic');
+      fireEvent.press(uploadButton);
+  
+      await waitFor(() => {
+        expect(Permissions.requestPhotoLibraryPermission).toHaveBeenCalledTimes(1);
+      });
+    });
+  
+    it('should handle image picker cancellation', async () => {
+      (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
+        true
+      );
+      (ImageCropPicker.openPicker as jest.Mock).mockRejectedValue({
+        code: 'E_PICKER_CANCELLED',
+      });
+  
+      const { getByText } = render(
+        <AddPetModal visible={true} closeFn={mockCloseFn} username={mockUsername} />
+      );
+  
+      const uploadButton = getByText('Upload Profile Pic');
+      fireEvent.press(uploadButton);
+  
+      await waitFor(() => {
+        expect(Permissions.requestPhotoLibraryPermission).toHaveBeenCalledTimes(1);
+        expect(ImageCropPicker.openPicker).toHaveBeenCalled();
+      });
+    });
+  
+    it('should handle image picker error gracefully', async () => {
+      (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
+        true
+      );
+      (ImageCropPicker.openPicker as jest.Mock).mockRejectedValue({
+        code: 'UNKNOWN_ERROR',
+        message: 'Some error occurred',
+      });
+  
+      const { getByText } = render(
+        <AddPetModal visible={true} closeFn={mockCloseFn} username={mockUsername} />
+      );
+  
+      const uploadButton = getByText('Upload Profile Pic');
+      fireEvent.press(uploadButton);
+  
+      await waitFor(() => {
+        expect(Permissions.requestPhotoLibraryPermission).toHaveBeenCalledTimes(1);
+        expect(ImageCropPicker.openPicker).toHaveBeenCalled();
+      });
+    });
+  });
+})
