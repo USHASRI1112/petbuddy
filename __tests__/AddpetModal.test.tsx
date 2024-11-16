@@ -294,7 +294,6 @@ describe('Test for inserting data', () => {
 });
 
 describe("Test for adding profile image",()=>{
-  describe('AddPetModal Component', () => {
     const mockCloseFn = jest.fn();
     const mockUsername = 'testUser';
   
@@ -396,5 +395,4 @@ describe("Test for adding profile image",()=>{
         expect(ImageCropPicker.openPicker).toHaveBeenCalled();
       });
     });
-  });
 })
