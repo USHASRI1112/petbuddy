@@ -4,11 +4,14 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
   ImageBackground,
   Platform,
+  Linking,
+  Alert,
+  ScrollView,
 } from 'react-native';
 import TrackModal from '../../components/TrackModal';
+import { requestCallPermission } from '../../components/Permissions';
 
 const PetScreen = ({navigation, route}: {navigation: any; route: any}) => {
   const {pet} = route.params;
@@ -30,30 +33,48 @@ const PetScreen = ({navigation, route}: {navigation: any; route: any}) => {
     navigation.setOptions({
       headerShown: true,
       headerTransparent: true,
+      headerStyle: { backgroundColor: 'transparent' },
       headerTitle: '',
       headerLeft: () => <CustomBackButton />,
     });
   }, [navigation]);
   const onHandleClose=()=>{setIsVisible(false)}
 
+  const makeCall = async () => {
+    const hasPermission = await requestCallPermission();
+    if (hasPermission) {
+      const phoneNumber = `tel:+91${pet.emergencyContact}`;
+      Linking.openURL(phoneNumber).catch(error =>
+        Alert.alert('Error', 'Unable to make a call. Please try again later.')
+      );
+    } else {
+      Alert.alert('Permission Denied', 'Please enable call permissions in your settings.');
+    }
+  };
+  
   return (
     <View style={styles.container}>
       <View>
+        {!pet.image_uri?
         <ImageBackground
           testID="dog-image"
           style={styles.dogImage}
-          source={require('./../../../public/assets/Home/dog.png')}></ImageBackground>
+          source={pet.image_uri?{uri:pet.image_uri}:require('./../../../public/assets/Home/dog.png')}></ImageBackground>:
+          <ImageBackground
+          testID="dog-image"
+          style={styles.dogImage}
+          source={{uri:pet.image_uri}}></ImageBackground>}
       </View>
-      <View style={styles.bottomSection}>
+      <ScrollView  contentContainerStyle={styles.bottomSection} >
         <TouchableOpacity style={styles.topDisplay}>
           <Text style={styles.petName}>{pet.name}</Text>
           <View style={styles.gender}>
             <View>
               <Text style={styles.breed}>{pet.breed}</Text>
-              <Text style={styles.phn}>+{91123456789}</Text>
+              <Text onPress ={()=>makeCall()}style={styles.phn}>+91{pet.emergencyContact}</Text>
             </View>
-            <View style={styles.genderDisplay}>
-                <Text >{pet.gender==="Male"?"♂":"♀"}</Text>
+            <View testID="genderid" style={styles.genderDisplay}>
+                <Text testID="gender-id" >{pet.gender==="Male"?"♂":"♀"}</Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -82,14 +103,13 @@ const PetScreen = ({navigation, route}: {navigation: any; route: any}) => {
           <Text style={styles.remarkText}>Remarks</Text>
           <Text>{pet.remarks}</Text>
         </View>
-        <TouchableOpacity style={styles.gallery}>
+        <TouchableOpacity style={styles.gallery} onPress={()=>navigation.navigate('Gallery',{pet})}>
           <Text style={styles.galleryText}>{'Gallery    >'}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.track} onPress={() => setIsVisible(!isVisible)}>
           <Text style={styles.trackText}>Track</Text>
         </TouchableOpacity>
-      </View>
-
+      </ScrollView>
       <TrackModal visible={isVisible} pet={pet} navigation={navigation} closeFn={onHandleClose}></TrackModal>
     </View>
   );
