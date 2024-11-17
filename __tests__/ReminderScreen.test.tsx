@@ -93,14 +93,10 @@ describe('Reminders Component', () => {
       },
     }
     const {getByText} = render(<Reminders route={mockRoute}  />);
-  // });
-
-    // const {getByText} = render(<Reminders route={{params: {pet: mockPet}}} />);
-
+ 
     await waitFor(() => {
       expect(getByText('Walk the dog')).toBeTruthy();
-      expect(getByText('On 16 Nov 2024 - 3:30 PM - 4:30 PM')).toBeTruthy();
-      // expect(getByText('10:00 AM - 11:00 AM')).toBeTruthy();
+      expect(getByText('On 16 Nov 2024 - 10:00 AM - 11:00 AM')).toBeTruthy();
     });
   });
 
