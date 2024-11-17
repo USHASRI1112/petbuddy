@@ -1115,6 +1115,8 @@ PODS:
     - React-jsi (= 0.73.10)
     - React-logger (= 0.73.10)
     - React-perflogger (= 0.73.10)
+  - RNCAsyncStorage (2.0.0):
+    - React-Core
   - RNCPicker (2.9.0):
     - React-Core
   - RNFS (2.20.0):
@@ -1128,6 +1130,11 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController (~> 2.7.4)
+  - RNNotifee (8.0.0):
+    - React-Core
+    - RNNotifee/NotifeeCore (= 8.0.0)
+  - RNNotifee/NotifeeCore (8.0.0):
+    - React-Core
   - RNPermissions (3.10.0):
     - React-Core
   - RNScreens (4.0.0):
@@ -1214,9 +1221,11 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - RNFS (from `../node_modules/react-native-fs`)
   - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
+  - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -1338,12 +1347,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNCAsyncStorage:
+    :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
   RNFS:
     :path: "../node_modules/react-native-fs"
   RNImageCropPicker:
     :path: "../node_modules/react-native-image-crop-picker"
+  RNNotifee:
+    :path: "../node_modules/@notifee/react-native"
   RNPermissions:
     :path: "../node_modules/react-native-permissions"
   RNScreens:
@@ -1413,9 +1426,11 @@ SPEC CHECKSUMS:
   React-runtimescheduler: 639000d08f94ee18017fad4c691c572bb6dfbe50
   React-utils: c3a9bede4e9aa5c0a8184958cd4c09ff461fd60f
   ReactCommon: 92194c3d756b82bff5b75450544b2863b4df0d5f
+  RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
   RNCPicker: f963e01f78e546a93b98aa201501713dbda14e94
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNImageCropPicker: a536bb88eade8336e1d18fdeafa77dc893fbc42e
+  RNNotifee: c8cec69d585ab1750c0f338e64069ff8053c1b6c
   RNPermissions: 843caf4d9b89c3174c571828854ca14d32122db9
   RNScreens: 6225b1182ac2845b78e7446b0573ea2afb703338
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
