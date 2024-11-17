@@ -103,7 +103,7 @@ describe('Register Component', () => {
         body: JSON.stringify(mockData),
       });
       expect(Alert.alert).toHaveBeenCalledWith('Registration Success');
-      expect(mockNavigation.replace).toHaveBeenCalledWith('Loader');
+      expect(mockNavigation.replace).toHaveBeenCalledWith('Loading');
       
     });
     await waitFor(()=>{
