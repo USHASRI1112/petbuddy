@@ -11,70 +11,94 @@ import {
   ScrollView,
 } from 'react-native';
 import TrackModal from '../../components/TrackModal';
-import { requestCallPermission } from '../../components/Permissions';
+import {requestCallPermission} from '../../components/Permissions';
 
 const PetScreen = ({navigation, route}: {navigation: any; route: any}) => {
   const {pet} = route.params;
   const [isVisible, setIsVisible] = useState(false);
   const CustomBackButton = () => (
     <TouchableOpacity
-        testID="back-button"
-        onPress={() => navigation.goBack()}
+      testID="back-button"
+      onPress={() => navigation.goBack()}
       style={{
         padding: 4,
         backgroundColor: 'green',
         flexDirection: 'column',
         alignItems: 'center',
       }}>
-      <Text  style={{fontSize: 18, color: 'white'}}>{'<'}</Text>
+      <Text style={{fontSize: 18, color: 'white'}}>{'<'}</Text>
     </TouchableOpacity>
   );
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: true,
       headerTransparent: true,
-      headerStyle: { backgroundColor: 'transparent' },
+      headerStyle: {backgroundColor: 'transparent'},
       headerTitle: '',
       headerLeft: () => <CustomBackButton />,
     });
   }, [navigation]);
-  const onHandleClose=()=>{setIsVisible(false)}
+  const onHandleClose = () => {
+    setIsVisible(false);
+  };
 
   const makeCall = async () => {
-    const hasPermission = await requestCallPermission();
-    if (hasPermission) {
-      const phoneNumber = `tel:+91${pet.emergencyContact}`;
-      Linking.openURL(phoneNumber).catch(error =>
-        Alert.alert('Error', 'Unable to make a call. Please try again later.')
-      );
+    if (Platform.OS === 'ios') {
+      Alert.alert('This feature is not available');
     } else {
-      Alert.alert('Permission Denied', 'Please enable call permissions in your settings.');
+      const hasPermission = await requestCallPermission();
+      if (hasPermission) {
+        const phoneNumber = `tel:+91${pet.emergencyContact}`;
+        try{
+          Linking.openURL(phoneNumber)
+        }
+        catch(e){
+          Alert.alert(
+            'Error',
+            'Unable to make a call. Please try again later.',
+          )
+        }
+      } else {
+        Alert.alert(
+          'Permission Denied','Please enable call permissions in your settings.',
+        );
+      }
     }
   };
-  
+
   return (
     <View style={styles.container}>
       <View>
-        {!pet.image_uri?
-        <ImageBackground
-          testID="dog-image"
-          style={styles.dogImage}
-          source={pet.image_uri?{uri:pet.image_uri}:require('./../../../public/assets/Home/dog.png')}></ImageBackground>:
+        {!pet.image_uri ? (
           <ImageBackground
-          testID="dog-image"
-          style={styles.dogImage}
-          source={{uri:pet.image_uri}}></ImageBackground>}
+            testID="dog-image"
+            style={styles.dogImage}
+            source={
+              pet.image_uri
+                ? {uri: pet.image_uri}
+                : require('./../../../public/assets/Home/dog.png')
+            }></ImageBackground>
+        ) : (
+          <ImageBackground
+            testID="dog-image"
+            style={styles.dogImage}
+            source={{uri: pet.image_uri}}></ImageBackground>
+        )}
       </View>
-      <ScrollView  contentContainerStyle={styles.bottomSection} >
+      <ScrollView contentContainerStyle={styles.bottomSection}>
         <TouchableOpacity style={styles.topDisplay}>
           <Text style={styles.petName}>{pet.name}</Text>
           <View style={styles.gender}>
             <View>
               <Text style={styles.breed}>{pet.breed}</Text>
-              <Text onPress ={()=>makeCall()}style={styles.phn}>+91{pet.emergencyContact}</Text>
+              <Text testID="phone-call" onPress={() => makeCall()} style={styles.phn}>
+                +91{pet.emergencyContact}
+              </Text>
             </View>
             <View testID="genderid" style={styles.genderDisplay}>
-                <Text testID="gender-id" >{pet.gender==="Male"?"♂":"♀"}</Text>
+              <Text testID="gender-id">
+                {pet.gender === 'Male' ? '♂' : '♀'}
+              </Text>
             </View>
           </View>
         </TouchableOpacity>
@@ -103,14 +127,22 @@ const PetScreen = ({navigation, route}: {navigation: any; route: any}) => {
           <Text style={styles.remarkText}>Remarks</Text>
           <Text>{pet.remarks}</Text>
         </View>
-        <TouchableOpacity style={styles.gallery} onPress={()=>navigation.navigate('Gallery',{pet})}>
+        <TouchableOpacity
+          style={styles.gallery}
+          onPress={() => navigation.navigate('Gallery', {pet})}>
           <Text style={styles.galleryText}>{'Gallery    >'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.track} onPress={() => setIsVisible(!isVisible)}>
+        <TouchableOpacity
+          style={styles.track}
+          onPress={() => setIsVisible(!isVisible)}>
           <Text style={styles.trackText}>Track</Text>
         </TouchableOpacity>
       </ScrollView>
-      <TrackModal visible={isVisible} pet={pet} navigation={navigation} closeFn={onHandleClose}></TrackModal>
+      <TrackModal
+        visible={isVisible}
+        pet={pet}
+        navigation={navigation}
+        closeFn={onHandleClose}></TrackModal>
     </View>
   );
 };
@@ -120,12 +152,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dogImage: {
-    width: Platform.OS==="android" ?500 : 400,
-    height: Platform.OS==="android" ?500 : 400,
+    width: Platform.OS === 'android' ? 500 : 400,
+    height: Platform.OS === 'android' ? 500 : 400,
     resizeMode: 'contain',
   },
-  topSection:{
-    flex:1
+  topSection: {
+    flex: 1,
   },
   bottomSection: {
     marginTop: 10,
@@ -219,19 +251,18 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
-  gender:{
-    flexDirection:'row',
-    justifyContent:'space-between',
+  gender: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  genderDisplay:{
-    color:'white',
-    backgroundColor:'pink',
-    borderRadius:10,
-    fontSize:20,
-    alignSelf:'center',
-    padding:8
-
-  }
+  genderDisplay: {
+    color: 'white',
+    backgroundColor: 'pink',
+    borderRadius: 10,
+    fontSize: 20,
+    alignSelf: 'center',
+    padding: 8,
+  },
 });
 
 export default PetScreen;
