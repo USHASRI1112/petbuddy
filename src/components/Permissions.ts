@@ -13,9 +13,9 @@ export const requestPhotoLibraryPermission = async () => {
         }
       }
     } else if(Platform.OS==="android"){
-      const permissionStatus = await check(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
-      if (permissionStatus === RESULTS.DENIED) {
-        const requestStatus = await request(PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE);
+      const permissionStatus = await check(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES);
+      if (permissionStatus === RESULTS.DENIED || RESULTS.BLOCKED) {
+        const requestStatus = await request(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES); 
         if (requestStatus !== RESULTS.GRANTED) {
           Alert.alert('Permission Denied', 'Photo Library access is required.');
           return false;
@@ -24,7 +24,6 @@ export const requestPhotoLibraryPermission = async () => {
     }
     return true; 
   } catch (e) {
-    console.error('Error checking Photo Library permission:', e);
     Alert.alert('Error', 'An error occurred while checking Photo Library permission.');
     return false;
   }
@@ -44,7 +43,6 @@ export const requestCallPermission = async () => {
     }
     return true;
   } catch (e) {
-    console.error('Error checking Call permission:', e);
     Alert.alert('Error', 'An error occurred while checking Call permission.');
     return false;
   }
