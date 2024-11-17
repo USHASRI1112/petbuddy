@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useLayoutEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -28,7 +28,9 @@ const Home = ({navigation}: {navigation: any}) => {
   if (!user) {
     return <Text>Something went wrong.</Text>;
   }
-  const onHandleClose=()=>{setIsVisible(false)}
+  const onHandleClose = () => {
+    setIsVisible(false);
+  };
   useEffect(() => {
     const fetchPets = async () => {
       try {
@@ -42,7 +44,27 @@ const Home = ({navigation}: {navigation: any}) => {
       }
     };
     fetchPets();
-  }, [user,onHandleClose]);
+  }, [user, onHandleClose]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: '',
+      headerLeft: () => <Text>{user.name}</Text>,
+      headerRight: () => (
+        <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+          <Image
+            source={require('./../../../public/assets/Register/profile2.png')}
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: 16,
+              marginRight: 10,
+            }}
+          />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.container}>
@@ -51,11 +73,18 @@ const Home = ({navigation}: {navigation: any}) => {
         <Text style={styles.headerText}>My Pets</Text>
       </View>
       <View style={styles.middleSection}>
-        <ScrollView style={styles.petsDisplaySection}>
-          {pets.map((pet, index) => (
-            <Pet pet={pet} key={index} navigation={navigation}  />
-          ))}
-        </ScrollView>
+        <View></View>
+        {pets.length === 0 ? (
+          <View>
+            <Text>No pets found</Text>
+          </View>
+        ) : (
+          <ScrollView style={styles.petsDisplaySection}>
+            {pets.map((pet, index) => (
+              <Pet pet={pet} key={index} navigation={navigation} />
+            ))}
+          </ScrollView>
+        )}
       </View>
       <View style={styles.bottomSection}>
         <TouchableOpacity style={styles.addPet}>
@@ -70,7 +99,11 @@ const Home = ({navigation}: {navigation: any}) => {
           </Text>
         </TouchableOpacity>
       </View>
-      <AddPetModal visible={isVisible} closeFn={onHandleClose} username={user.name} />
+      <AddPetModal
+        visible={isVisible}
+        closeFn={onHandleClose}
+        username={user.name}
+      />
     </View>
   );
 };
