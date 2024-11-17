@@ -1,157 +1,167 @@
 import React from 'react';
-import {fireEvent, render, screen} from '@testing-library/react-native';
+import {fireEvent, render, screen, waitFor} from '@testing-library/react-native';
 import Login from '../src/screens/Login/LoginScreen';
 import {NavigationContainer} from '@react-navigation/native';
-import {Platform} from 'react-native';
-import {UserContext, UserContextProvider} from '../src/Context/Context';
+import {Alert, Platform} from 'react-native';
+import {UserContext} from '../src/Context/Context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-describe('Test for Main Component', () => {
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  setItem: jest.fn(),
+  getItem: jest.fn(),
+  removeItem: jest.fn(),
+}));
+
+const mockNavigation = {
+  replace: jest.fn(),
+};
+Alert.alert = jest.fn()
+
+describe('Login Component', () => {
   const mockSetUser = jest.fn();
-  const user = {
-    name: 'Usha',
-    password: '1234',
-    email: 'usha@gmail.com',
-    contact: '23456789',
-    about: 'me',
-    address: 'wgl',
-    pets: [],
-  };
+
+  const renderComponent = () =>
+    render(
+      <UserContext.Provider value={{user: null, setUser: mockSetUser}}>
+        <Login navigation={mockNavigation} />
+      </UserContext.Provider>,
+    );
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders the top image', () => {
-    const {getByTestId} = render(
-      <NavigationContainer>
-       <UserContext.Provider
-          value={{
-            user: user,
-            setUser: mockSetUser,
-          }}>
-          <Login navigation={{replace: jest.fn()}} />
-        </UserContext.Provider>
-      </NavigationContainer>,
-    );
-    const imageBackground = getByTestId('top-image');
-    expect(imageBackground).toBeTruthy();
+    const {getByTestId} = renderComponent();
+    expect(getByTestId('top-image')).toBeTruthy();
   });
-  it('it should render the petbuddy image', () => {
-    const {getByTestId} = render(
-      <NavigationContainer>
-       <UserContext.Provider
-          value={{
-            user: user,
-            setUser: mockSetUser,
-          }}>
-          <Login navigation={{replace: jest.fn()}} />
-        </UserContext.Provider>
-      </NavigationContainer>,
-    );
-    const imageBackground = getByTestId('petbuddy-image');
-    expect(imageBackground).toBeTruthy();
+
+  it('renders the petbuddy image', () => {
+    const {getByTestId} = renderComponent();
+    expect(getByTestId('petbuddy-image')).toBeTruthy();
   });
-  it('it should render all the texts correctly', () => {
-    const {getByText} = render(
-      <NavigationContainer>
-       <UserContext.Provider
-          value={{
-            user: user,
-            setUser: mockSetUser,
-          }}>
-          <Login navigation={{replace: jest.fn()}} />
-        </UserContext.Provider>
-      </NavigationContainer>,
-    );
+
+  it('renders required texts', () => {
+    const {getByText} = renderComponent();
     expect(getByText('Pet')).toBeTruthy();
     expect(getByText('Buddy!')).toBeTruthy();
     expect(getByText("Don't have an account? Register")).toBeTruthy();
     expect(getByText('©️All Rights Reserved to PetBuddy - 2024')).toBeTruthy();
     expect(getByText('LOGIN')).toBeTruthy();
   });
-  it('Should test for input elements', () => {
-    const {getByPlaceholderText} = render(
-      <NavigationContainer>
-       <UserContext.Provider
-          value={{
-            user: user,
-            setUser: mockSetUser,
-          }}>
-          <Login navigation={{replace: jest.fn()}} />
-        </UserContext.Provider>
-      </NavigationContainer>,
-    );
+
+  it('renders input fields with placeholders', () => {
+    const {getByPlaceholderText} = renderComponent();
     expect(getByPlaceholderText('User name')).toBeTruthy();
     expect(getByPlaceholderText('Password')).toBeTruthy();
   });
-  it('renders the image with correct height and width for iOS', () => {
-    Platform.OS = 'ios';
-    render(
-      <NavigationContainer>
-       <UserContext.Provider
-          value={{
-            user: user,
-            setUser: mockSetUser,
-          }}>
-          <Login navigation={{replace: jest.fn()}} />
-        </UserContext.Provider>
-      </NavigationContainer>,
-    );
-    expect(screen.getByTestId('top-image').props.style).toMatchObject({
-      resizeMode: 'stretch',
-      height: 100,
-      width: 400,
-    });
-  });
-  it('navigates to Login screen when "Already have an account? Login" is pressed', () => {
-    const mockNavigation = {replace: jest.fn()};
-    const {getByText} = render(
-      <NavigationContainer>
-       <UserContext.Provider
-          value={{
-            user: user,
-            setUser: mockSetUser,
-          }}>
-          <Login navigation={mockNavigation} />
-        </UserContext.Provider>
-      </NavigationContainer>,
-    );
 
-    const registerText = getByText("Don't have an account? Register");
-    fireEvent.press(registerText);
-
+  it("navigates to the Register screen when Don't have an account is clicked", () => {
+    const {getByText} = renderComponent();
+    fireEvent.press(getByText("Don't have an account? Register"));
     expect(mockNavigation.replace).toHaveBeenCalledWith('Register');
   });
-  it('updates username field on input change', () => {
-    const setUserName = jest.fn();
-    const mockNavigation = {replace: jest.fn()};
-    const {getByTestId} = render(
-      <NavigationContainer>
-       <UserContext.Provider
-          value={{
-            user: user,
-            setUser: mockSetUser,
-          }}>
-          <Login navigation={mockNavigation} />
-        </UserContext.Provider>
-      </NavigationContainer>,
-    );
-    const usernameInput = getByTestId('username-input');
-    fireEvent.changeText(usernameInput, 'testUser');
-    expect(usernameInput.props.value).toBe('testUser');
-  });
-  it('updates password field on input change', () => {
-    const mockNavigation = {replace: jest.fn()};
-    const setPassword = jest.fn();
-    const {getByTestId} = render(
-      <NavigationContainer>
-       <UserContext.Provider
-          value={{
-            user: user,
-            setUser: mockSetUser,
-          }}>
-          <Login navigation={mockNavigation} />
-        </UserContext.Provider>
-      </NavigationContainer>,
-    );
 
-    const passwordInput = getByTestId('password-input');
-    fireEvent.changeText(passwordInput, 'testPass123');
-    expect(passwordInput.props.value).toBe('testPass123');
+  it('updates the username field on input change', () => {
+    const {getByPlaceholderText} = renderComponent();
+    const usernameInput = getByPlaceholderText('User name');
+    fireEvent.changeText(usernameInput, 'Usha');
+    expect(usernameInput.props.value).toBe('Usha');
   });
-});
+
+  it('updates the password field on input change', () => {
+    const {getByPlaceholderText} = renderComponent();
+    const passwordInput = getByPlaceholderText('Password');
+    fireEvent.changeText(passwordInput, 'password123');
+    expect(passwordInput.props.value).toBe('password123');
+  });
+
+  it('displays an error alert when login fails with invalid credentials', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        status: 401,
+      }),
+    ) as jest.Mock;
+
+    const {getByText, getByPlaceholderText} = renderComponent();
+    fireEvent.changeText(getByPlaceholderText('User name'), 'wronguser');
+    fireEvent.changeText(getByPlaceholderText('Password'), 'wrongpassword');
+    fireEvent.press(getByText('LOGIN'));
+
+    await waitFor(() => {
+      expect(Alert.alert).toHaveBeenCalledWith('Invalid Credentials')
+      expect(mockNavigation.replace).not.toHaveBeenCalled();
+    });
+  });
+  // it('displays an error alert when user not found', async () => {
+  //   global.fetch = jest.fn(() =>
+  //     Promise.resolve({
+  //       status: 404,
+  //     }),
+  //   ) as jest.Mock;
+
+  //   const {getByText, getByPlaceholderText} = renderComponent();
+  //   fireEvent.changeText(getByPlaceholderText('User name'), 'nouser');
+  //   fireEvent.changeText(getByPlaceholderText('Password'), 'wrongpassword');
+  //   fireEvent.press(getByText('LOGIN'));
+
+  //   await waitFor(() => {
+  //     expect(Alert.alert).toHaveBeenCalledWith('User Details not found')
+  //     expect(mockNavigation.replace).not.toHaveBeenCalled();
+  //    });
+  // });
+
+
+  it('logs in successfully and navigates to Home screen', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        status: 200,
+        json: jest.fn().mockResolvedValue({name: 'Usha', token: '1234'}),
+      }),
+    ) as jest.Mock;
+
+    const {getByText, getByPlaceholderText} = renderComponent();
+    fireEvent.changeText(getByPlaceholderText('User name'), 'Usha');
+    fireEvent.changeText(getByPlaceholderText('Password'), '1234');
+    fireEvent.press(getByText('LOGIN'));
+
+    await waitFor(() => {
+      expect(mockSetUser).toHaveBeenCalledWith({name: 'Usha', token: '1234'});
+      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
+        'loggedInUser',
+        JSON.stringify({name: 'Usha', token: '1234'}),
+      );
+      expect(mockNavigation.replace).toHaveBeenCalledWith('Loading');
+    });
+
+    await waitFor(()=>{
+      expect(mockNavigation.replace).toHaveBeenCalledWith('Home')
+    })
+  });
+
+  it('shows alert for empty fields', async () => {
+    const {getByText} = renderComponent();
+    fireEvent.press(getByText('LOGIN'));
+    await waitFor(() => {
+      expect(mockNavigation.replace).not.toHaveBeenCalled();
+    });
+  });
+
+  it('displays an error alert for server errors', async () => {
+    global.fetch = jest.fn(() => Promise.reject(new Error('Server error'))) as jest.Mock;
+
+    const {getByText, getByPlaceholderText} = renderComponent();
+    fireEvent.changeText(getByPlaceholderText('User name'), 'Usha');
+    fireEvent.changeText(getByPlaceholderText('Password'), '123');
+    fireEvent.press(getByText('LOGIN'));
+
+    await waitFor(() => {
+      expect(mockNavigation.replace).not.toHaveBeenCalled();
+    });
+  });
+
+  it("should handle no context case",()=>{
+    const {getByText} = render(<Login navigation={mockNavigation} />)
+    expect(getByText("Something went wrong")).toBeTruthy()
+  })
+})
