@@ -86,7 +86,7 @@ const GalleryScreen = ({route}: {route: any}) => {
   };
 
   const renderImage = ({item}: {item: string}) => (
-    <Image style={styles.image} source={{uri: item}} />
+    <Image testID="gallery-image" style={styles.image} source={{uri: item}} />
   );
 
   return (
