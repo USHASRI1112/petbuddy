@@ -53,7 +53,7 @@ const Reminders = ({route}: {route: any}) => {
        console.log("Something went wrong.")
       }
     } catch (e) {
-      console.log(e)
+      console.log("Error fetching data")
     }
   };
   useEffect(() => {
