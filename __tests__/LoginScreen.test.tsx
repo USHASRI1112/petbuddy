@@ -93,30 +93,12 @@ describe('Login Component', () => {
       expect(mockNavigation.replace).not.toHaveBeenCalled();
     });
   });
-  // it('displays an error alert when user not found', async () => {
-  //   global.fetch = jest.fn(() =>
-  //     Promise.resolve({
-  //       status: 404,
-  //     }),
-  //   ) as jest.Mock;
-
-  //   const {getByText, getByPlaceholderText} = renderComponent();
-  //   fireEvent.changeText(getByPlaceholderText('User name'), 'nouser');
-  //   fireEvent.changeText(getByPlaceholderText('Password'), 'wrongpassword');
-  //   fireEvent.press(getByText('LOGIN'));
-
-  //   await waitFor(() => {
-  //     expect(Alert.alert).toHaveBeenCalledWith('User Details not found')
-  //     expect(mockNavigation.replace).not.toHaveBeenCalled();
-  //    });
-  // });
-
 
   it('logs in successfully and navigates to Home screen', async () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         status: 200,
-        json: jest.fn().mockResolvedValue({name: 'Usha', token: '1234'}),
+        json: jest.fn().mockResolvedValue({name: 'Usha', password: '1234'}),
       }),
     ) as jest.Mock;
 
@@ -126,10 +108,10 @@ describe('Login Component', () => {
     fireEvent.press(getByText('LOGIN'));
 
     await waitFor(() => {
-      expect(mockSetUser).toHaveBeenCalledWith({name: 'Usha', token: '1234'});
+      expect(mockSetUser).toHaveBeenCalledWith({name: 'Usha', password: '1234'});
       expect(AsyncStorage.setItem).toHaveBeenCalledWith(
         'loggedInUser',
-        JSON.stringify({name: 'Usha', token: '1234'}),
+        JSON.stringify({name: 'Usha', password: '1234'}),
       );
       expect(mockNavigation.replace).toHaveBeenCalledWith('Loading');
     });
