@@ -41,12 +41,12 @@ export function StackNavigator() {
 export function TabNavigator(): React.JSX.Element {
   return (
     <Tab.Navigator
-      initialRouteName={'Home'}
+      initialRouteName={'HomeScreen'}
       screenOptions={({route}) => ({
         tabBarIcon: ({focused, color, size}) => {
           let iconSource;
           switch (route.name) {
-            case 'Home':
+            case 'HomeScreen':
               iconSource = require('./public/assets/Tabs/homefilled.png');
               break;
             case 'Services':
@@ -89,7 +89,7 @@ export function TabNavigator(): React.JSX.Element {
         },
       })}>
       <Tab.Screen
-        name="Home"
+        name="HomeScreen"
         component={StackNavigator}
         options={{headerShown: false}}
       />
