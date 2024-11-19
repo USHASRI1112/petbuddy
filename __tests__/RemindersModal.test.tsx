@@ -135,22 +135,9 @@ describe('AddReminder', () => {
     await waitFor(() => {
       expect(fetch).toHaveBeenCalled();
       expect(Alert.alert).toHaveBeenCalledWith('Reminder created');
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({
-      //     title: 'Morning Walk',
-      //     startTime: expect.any(String),
-      //     endTime: expect.any(String),
-      //     type: 'Weekly',
-      //     petName: 'Buddy',
-      //     date: expect.any(String),
-      //   }),
-      // });
     });
   });
-  it('should create reminder successfully', async () => {
+  it('should not create reminder successfully & throw error', async () => {
     (fetch as jest.Mock).mockResolvedValue({status: 400});
     (Alert.alert as jest.Mock).mockResolvedValue('Something went wrong.');
     render(<AddReminder visible={true} pet={mockPet} closeFn={mockCloseFn} />);
@@ -191,7 +178,7 @@ describe('AddReminder', () => {
 
 describe('AddReminder Component', () => {
   const mockCloseFn = jest.fn();
-  const petMock = {name: 'Buddy'}; // Simulate a pet object for testing
+  const petMock = {name: 'Buddy'}; 
 
   beforeEach(() => {
     jest.resetAllMocks();
