@@ -41,13 +41,14 @@ const Activity = ({route}: {route: any}) => {
   function formatTimeRange(startTimeString: any, endTimeString: any): string {
     const formatTime = (dateString: string) => {
       const date = new Date(dateString);
-      let hours = date.getHours();
-      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const hours = date.getUTCHours(); 
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');; 
       const period = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12 || 12;
-      return `${hours}:${minutes} ${period}`;
+      const formattedTime = `${hours % 12 || 12}:${minutes} ${period}`;
+
+      return formattedTime;
     };
-    
+
     return `${formatTime(startTimeString)} - ${formatTime(endTimeString)}`;
   }
 
