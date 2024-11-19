@@ -57,10 +57,6 @@ const AddReminder = ({
       const utcEndTime = new Date(endTime.getTime() - endTime.getTimezoneOffset() * 60000).toISOString();
       const utcDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString();
   
-      if(utcStartTime>utcEndTime){
-        Alert.alert("Invalid Time selected");
-        return;
-      }
       const response = await fetch(`${API_URL}pets/reminders/${pet.name}`, {
         method: 'POST',
         headers: {
@@ -75,7 +71,6 @@ const AddReminder = ({
           date: utcDate,
         }),
       });
-      console.log(response)
       if (response.status === 201) {
         console.log("sucess")
         fetchAndScheduleReminders()
@@ -174,7 +169,7 @@ const AddReminder = ({
               <Text style={styles.timeText}>{formattedStartTime}</Text>
             </TouchableOpacity>
             {showStartTimePicker && (
-              <TouchableOpacity>
+              <TouchableOpacity testID='start-time-picker'>
                 <DatePicker
                   date={startTime}
                   onDateChange={setStartTime}
@@ -183,7 +178,7 @@ const AddReminder = ({
                   fadeToColor="white"
                   style={styles.datePicker}
                   is24hourSource="locale"
-                  testID='start-time-picker'
+                  
                 />
                 <TouchableOpacity
                 testID="startTimeDone"
@@ -202,7 +197,7 @@ const AddReminder = ({
               <Text style={styles.timeText}>{formattedEndTime}</Text>
             </TouchableOpacity>
             {showEndTimePicker && (
-              <TouchableOpacity>
+              <TouchableOpacity testID='end-time-picker'>
                 <DatePicker
                   date={endTime}
                   onDateChange={setEndTime}
@@ -211,7 +206,6 @@ const AddReminder = ({
                   fadeToColor="white"
                   style={styles.datePicker}
                   is24hourSource="locale"
-                  testID='end-time-picker'
                 />
                 <TouchableOpacity
                 testID='endTimeDone'
