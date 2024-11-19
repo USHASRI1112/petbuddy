@@ -34,7 +34,7 @@ describe('Activity Component', () => {
   
       await screen.findByText('Playtime at the park');
       await screen.findByText('Fetch exercise');
-      // expect(screen.getByText('On 18 Nov 2024 - 1:30 PM - 3:00 PM')).toBeTruthy();
+      expect(screen.getByText('On 18 Nov 2024 - 10:00 AM - 11:00 AM')).toBeTruthy();
     });
     it('should handle empty activity list', () => {
       (global.fetch as jest.Mock).mockResolvedValue({
