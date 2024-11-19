@@ -15,6 +15,22 @@ jest.mock('react-native-date-picker', () => {
   };
 });
 
+jest.mock('@notifee/react-native', () => ({
+  createChannel: jest.fn(),
+  setNotificationCategories: jest.fn(),
+  requestPermission: jest.fn(),
+  createTriggerNotification: jest.fn(),
+  onForegroundEvent: jest.fn().mockImplementation(() => ({
+    remove: jest.fn(),
+  })),
+}));
+
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  setItem: jest.fn(),
+  getItem: jest.fn(),
+  removeItem: jest.fn(),
+}));
+
 global.fetch = jest.fn();
 
 Alert.alert = jest.fn();
