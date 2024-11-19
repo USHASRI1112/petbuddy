@@ -1,5 +1,9 @@
 import {render} from '@testing-library/react-native';
 import Reminders from '../src/screens/Reminders/ReminderScreen';
+import React from 'react';
+import { fireEvent, waitFor, act} from '@testing-library/react-native';
+import AddReminder from '../src/components/AddreminderModal';
+import { API_URL } from '../API';
 
 jest.mock('react-native-date-picker', () => {
   return {
@@ -31,12 +35,6 @@ describe('Test for remidners page', () => {
 
   it
 });
-
-
-import React from 'react';
-import { fireEvent, waitFor, act} from '@testing-library/react-native';
-import AddReminder from '../src/components/AddreminderModal';
-import { API_URL } from '../API';
 
 jest.mock('./../src/components/AddreminderModal', () =>
   jest.fn(() => null) 
