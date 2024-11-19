@@ -24,21 +24,22 @@ const Reminders = ({route}: {route: any}) => {
   function formatDate(dateString: any): string {
     const date = new Date(dateString);
     const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'short' });
+    const month = date.toLocaleString('default', {month: 'short'});
     const year = date.getFullYear();
     return `On ${day} ${month} ${year}`;
   }
-  
+
   function formatTimeRange(startTimeString: any, endTimeString: any): string {
     const formatTime = (dateString: string) => {
       const date = new Date(dateString);
-      let hours = date.getHours();
-      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const hours = date.getUTCHours(); 
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');; 
       const period = hours >= 12 ? 'PM' : 'AM';
-      hours = hours % 12 || 12;
-      return `${hours}:${minutes} ${period}`;
+      const formattedTime = `${hours % 12 || 12}:${minutes} ${period}`;
+
+      return formattedTime;
     };
-    
+
     return `${formatTime(startTimeString)} - ${formatTime(endTimeString)}`;
   }
 
@@ -50,15 +51,15 @@ const Reminders = ({route}: {route: any}) => {
         const finaldata = data.filter((item: any) => item.type === current);
         setReminders(finaldata);
       } else {
-       console.log("Something went wrong.")
+        console.log('Something went wrong.');
       }
     } catch (e) {
-      console.log("Error fetching data")
+      console.log('Error fetching data');
     }
   };
   useEffect(() => {
     fetchReminders();
-  }, [current,onHandleClose]);
+  }, [current, onHandleClose]);
 
   return (
     <View style={styles.container}>
@@ -77,17 +78,17 @@ const Reminders = ({route}: {route: any}) => {
       </View>
       <View style={styles.typesDisplay}>
         <TouchableOpacity
-          style={current==='Daily' ? styles.selectedType : styles.type}
+          style={current === 'Daily' ? styles.selectedType : styles.type}
           onPress={() => setCurrent('Daily')}>
           <Text>Daily</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={current==='Weekly' ? styles.selectedType : styles.type}
+          style={current === 'Weekly' ? styles.selectedType : styles.type}
           onPress={() => setCurrent('Weekly')}>
           <Text>Weekly</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={current==='Monthly' ? styles.selectedType : styles.type}
+          style={current === 'Monthly' ? styles.selectedType : styles.type}
           onPress={() => setCurrent('Monthly')}>
           <Text>Monthly</Text>
         </TouchableOpacity>
@@ -95,14 +96,17 @@ const Reminders = ({route}: {route: any}) => {
 
       <ScrollView style={styles.reminders}>
         {reminders && reminders.length > 0 ? (
-          reminders.map((reminder: any,index:any) => (
+          reminders.map((reminder: any, index: any) => (
             <View key={index} style={styles.reminderContent}>
               <View>
                 <Text>🐾</Text>
               </View>
               <View style={styles.reminderInfo}>
                 <Text style={styles.reminderTitle}>{reminder.title}</Text>
-                <Text>{formatDate(reminder.date)} - {formatTimeRange(reminder.startTime,reminder.endTime)}</Text>
+                <Text>
+                  {formatDate(reminder.date)} -{' '}
+                  {formatTimeRange(reminder.startTime, reminder.endTime)}
+                </Text>
               </View>
             </View>
           ))
@@ -171,37 +175,35 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgreen',
     borderRadius: 10,
   },
-  reminders:{
-    marginHorizontal:'4%',
-    marginVertical:'5%',
+  reminders: {
+    marginHorizontal: '4%',
+    marginVertical: '5%',
   },
-  reminderContent:{
-    flexDirection:'row',
-    padding:10,
-    alignItems:'center',
-    gap:10,
-  }
-  ,
-  nodata:{
-    alignSelf:'center',
-    justifyContent:'center',
-    alignItems:'center'
-  }
-  ,
-  reminderInfo:{
-    flexDirection:'column',
-    justifyContent:'center',
-    gap:5,
+  reminderContent: {
+    flexDirection: 'row',
+    padding: 10,
+    alignItems: 'center',
+    gap: 10,
   },
-  reminderTitle:{
-    fontWeight:'bold',
-    fontSize:12
+  nodata: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  selectedType:{
+  reminderInfo: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: 5,
+  },
+  reminderTitle: {
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  selectedType: {
     padding: 10,
     backgroundColor: 'forestgreen',
     borderRadius: 10,
-  }
+  },
 });
 
 export default Reminders;
