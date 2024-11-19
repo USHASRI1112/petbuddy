@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import {API_URL} from '../../API';
+import { fetchAndScheduleReminders } from './Notifications';
 
 const AddReminder = ({
   visible,
@@ -56,9 +57,10 @@ const AddReminder = ({
       const utcEndTime = new Date(endTime.getTime() - endTime.getTimezoneOffset() * 60000).toISOString();
       const utcDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString();
   
-      console.log("utcStartTime",utcStartTime)
-      console.log("utcEndTime",utcEndTime)
-      console.log("utcDate", utcDate)
+      if(utcStartTime>utcEndTime){
+        Alert.alert("Invalid Time selected");
+        return;
+      }
       const response = await fetch(`${API_URL}pets/reminders/${pet.name}`, {
         method: 'POST',
         headers: {
@@ -76,6 +78,7 @@ const AddReminder = ({
       console.log(response)
       if (response.status === 201) {
         console.log("sucess")
+        fetchAndScheduleReminders()
         Alert.alert('Reminder created');
         setActivity('');
         setFrequency('Daily');
