@@ -56,6 +56,9 @@ const AddReminder = ({
       const utcEndTime = new Date(endTime.getTime() - endTime.getTimezoneOffset() * 60000).toISOString();
       const utcDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString();
   
+      console.log("utcStartTime",utcStartTime)
+      console.log("utcEndTime",utcEndTime)
+      console.log("utcDate", utcDate)
       const response = await fetch(`${API_URL}pets/reminders/${pet.name}`, {
         method: 'POST',
         headers: {
@@ -85,11 +88,6 @@ const AddReminder = ({
     }
   };
 
-  // const formattedDate = selectedDate.toLocaleDateString('en-US', {
-  //   year: 'numeric',
-  //   month: 'long',
-  //   day: 'numeric',
-  // });
   const formattedStartTime = startTime.toLocaleTimeString('en-US', {
     hour: '2-digit',
     minute: '2-digit',
