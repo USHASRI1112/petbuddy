@@ -90,7 +90,6 @@ export async function scheduleNotification(
     await notifee.createTriggerNotification(notificationPayload, trigger);
 
     if (reminderData.type === 'Monthly' && next) {
-      console.log(`Scheduling next monthly notification for ${next}`);
       scheduleNotification(title, body, next, reminderData, isEndNotification);
     }
   } catch (error:any) {
