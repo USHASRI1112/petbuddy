@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -99,34 +99,9 @@ export function TabNavigator(): React.JSX.Element {
   );
 }
 
-export function AppNavigator() {
-  let initial = 'Main';
-  const userContext = useContext(UserContext);
-  if (!userContext) {
-    return (
-      <View>
-        <Text>Something went wrong</Text>
-      </View>
-    );
-  }
-  const {user, setUser} = userContext;
-  let loggedInUser: any;
-  useEffect(() => {
-    const fetchUser = async () => {
-      loggedInUser = await AsyncStorage.getItem('loggedInUser');
-      console.log('loggedInUser', loggedInUser);
-      if (loggedInUser) {
-        console.log('loggedInUser', loggedInUser.name);
-        initial = 'Home';
-        setUser(JSON.parse(loggedInUser));
-      }
-    };
-    fetchUser();      
-    console.log('Username', user?.name);
-  }, []);
-
+const HomeStack = () => {
   return (
-    <Stack.Navigator initialRouteName={initial}>
+    <Stack.Navigator initialRouteName={'Home'}>
       <Stack.Screen
         name="Main"
         component={Main}
@@ -155,4 +130,97 @@ export function AppNavigator() {
       />
     </Stack.Navigator>
   );
+};
+
+const MainStack = () => {
+  return (
+    <Stack.Navigator initialRouteName={'Main'}>
+      <Stack.Screen
+        name="Main"
+        component={Main}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Loading"
+        component={Loader}
+        options={{headerShown: false}}
+      />
+
+      <Stack.Screen
+        name="Register"
+        component={Register}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Home"
+        component={TabNavigator}
+        options={{headerShown: false}}
+      />
+    </Stack.Navigator>
+  );
+};
+export function AppNavigator() {
+  const userContext = useContext(UserContext);
+  if (!userContext) {
+    return (
+      <View>
+        <Text>Something went wrong</Text>
+      </View>
+    );
+  }
+  const {user, setUser} = userContext;
+  let loggedInUser: any;
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      loggedInUser = await AsyncStorage.getItem('loggedInUser');
+      if (loggedInUser) {
+        console.log('user there');
+        setUser(JSON.parse(loggedInUser));
+      }
+    };
+    fetchUser();
+  }, []);
+  if (user) {
+    return <HomeStack />;
+  } else {
+    return <MainStack />;
+  }
+  // return (
+  //   // <Stack.Navigator initialRouteName={user?'Home':'Main'}>
+  //   //   <Stack.Screen
+  //   //     name="Main"
+  //   //     component={Main}
+  //   //     options={{headerShown: false}}
+  //   //   />
+  //   //   <Stack.Screen
+  //   //     name="Login"
+  //   //     component={Login}
+  //   //     options={{headerShown: false}}
+  //   //   />
+  //   //   <Stack.Screen
+  //   //     name="Loading"
+  //   //     component={Loader}
+  //   //     options={{headerShown: false}}
+  //   //   />
+
+  //   //   <Stack.Screen
+  //   //     name="Register"
+  //   //     component={Register}
+  //   //     options={{headerShown: false}}
+  //   //   />
+  //   //   <Stack.Screen
+  //   //     name="Home"
+  //   //     component={TabNavigator}
+  //   //     options={{headerShown: false}}
+  //   //   />
+  //   // </Stack.Navigator>
+  //   {loggedInUser? <HomeStack/> : <MainStack/>}
+  // );
+
 }
