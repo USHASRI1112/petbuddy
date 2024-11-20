@@ -13,7 +13,8 @@ import AddPetModal from '../../components/AddPetModal';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import RNFS from 'react-native-fs';
 import {requestPhotoLibraryPermission} from '../../components/Permissions';
-import { API_URL } from '../../../API';
+import {API_URL} from '../../../API';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = ({navigation}: {navigation: any}) => {
   const userContext = useContext(UserContext);
@@ -36,33 +37,29 @@ const Profile = ({navigation}: {navigation: any}) => {
     navigation.setOptions({
       headerTitle: `Hi, ${user.name}`,
     });
-    setPhoto(user.image_uri)
-  }, [navigation, user.name,user]);
+    setPhoto(user.image_uri);
+  }, [navigation, user.name, user]);
 
-  
-  const updatePic=async(pic:string)=>{
-    try{
-      const response = await fetch(`${API_URL}user/profile/${user.name}`,{
-        method:'POST',
+  const updatePic = async (pic: string) => {
+    try {
+      const response = await fetch(`${API_URL}user/profile/${user.name}`, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({"profile":pic})
-      })
-      console.log(response)
-      if(response.status===200){
+        body: JSON.stringify({profile: pic}),
+      });
+      if (response.status === 200) {
         const user = await response.json();
-        setUser(user)
-        Alert.alert("Pic uploaded succesffully")
+        setUser(user);
+        Alert.alert('Pic uploaded succesffully');
+      } else {
+        Alert.alert('Something went wrong, Try again later');
       }
-      else{
-        Alert.alert("Something went wrong, Try again later")
-      }
+    } catch (e) {
+      Alert.alert(`${e}`);
     }
-    catch(e){
-      Alert.alert(`${e}`)
-    }
-  }
+  };
   const handleImage = async () => {
     try {
       if (await requestPhotoLibraryPermission()) {
@@ -84,17 +81,19 @@ const Profile = ({navigation}: {navigation: any}) => {
               console.log('Error: ', error.message);
             }
           });
+      } else {
+        Alert.alert('Permission Not Granted');
       }
-      else{
-        Alert.alert("Permission Not Granted")
-      }
-    } catch (Error: any) {}
+    } catch (Error: any) {
+      Alert.alert('Error');
+    }
   };
 
-  const handleSignOut = () => {
-    // setUser(null);
-    navigation.navigate('Main');
+  const handleSignOut = async () => {
+    navigation.replace('Main');
+    await AsyncStorage.setItem('loggedInUser', '');
   };
+
   const onHandleClose = () => {
     setIsVisible(false);
   };
@@ -102,11 +101,15 @@ const Profile = ({navigation}: {navigation: any}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity testID="handle-image" onPress={() => handleImage()}>
-        {user.image_uri? (
-          <Image testID="profile-image" style={styles.image} source={{uri: photo}} />
+        {user.image_uri ? (
+          <Image
+            testID="profile-image"
+            style={styles.image}
+            source={{uri: photo}}
+          />
         ) : (
           <Image
-          testID="profile-image2" 
+            testID="profile-image2"
             style={styles.image}
             source={require('./../../../public/assets/Register/profile.png')}
           />
