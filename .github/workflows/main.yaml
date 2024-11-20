@@ -1,6 +1,6 @@
 name: PetBuddy
 on: 
-  push:
+  pull_request:
     branches:
       - master
       - petbuddy/version-1
