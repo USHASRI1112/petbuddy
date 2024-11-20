@@ -128,6 +128,74 @@ describe('GalleryScreen Tests', () => {
       });
     });
   });
+  it('handles not image upload successfully', async () => {
+    (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
+      true,
+    );
+    (fetch as jest.Mock)
+      .mockResolvedValueOnce({
+        status: 200,
+        json: jest.fn().mockResolvedValue([]),
+      })
+      .mockResolvedValueOnce({status: 400});
+
+    const {getByText} = render(<GalleryScreen route={mockRoute} />);
+
+    const uploadButton = getByText('Add Image');
+    fireEvent.press(uploadButton);
+
+    await waitFor(() => {
+      expect(Permissions.requestPhotoLibraryPermission).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(ImageCropPicker.openPicker).toHaveBeenCalledWith({
+        width: 300,
+        height: 400,
+        cropping: true,
+      });
+      expect(RNFS.readFile).toHaveBeenCalledWith('path', 'base64');
+      expect(fetch).toHaveBeenCalledWith(`${API_URL}pets/gallery/Buddy`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({path: 'data:image/jpeg;base64,MockBase64Image'}),
+      });
+      expect(Alert.alert).toHaveBeenCalledWith(
+        'Something went wrong, Try again later',
+      );
+    });
+  });
+
+  it('handles image uploading error ', async () => {
+    (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
+      true,
+    );
+    (fetch as jest.Mock)
+      .mockRejectedValueOnce(new Error('Error fetching images'))
+      .mockRejectedValueOnce(new Error('DB Error'));
+
+    const {getByText} = render(<GalleryScreen route={mockRoute} />);
+
+    const uploadButton = getByText('Add Image');
+    fireEvent.press(uploadButton);
+
+    await waitFor(() => {
+      expect(Permissions.requestPhotoLibraryPermission).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(ImageCropPicker.openPicker).toHaveBeenCalledWith({
+        width: 300,
+        height: 400,
+        cropping: true,
+      });
+      expect(RNFS.readFile).toHaveBeenCalledWith('path', 'base64');
+      expect(fetch).toHaveBeenCalledWith(`${API_URL}pets/gallery/Buddy`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({path: 'data:image/jpeg;base64,MockBase64Image'}),
+      });
+      expect(Alert.alert).toHaveBeenCalledWith('Error: DB Error');
+    });
+  });
 
   it('shows alert when permission is denied', async () => {
     (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
@@ -146,7 +214,7 @@ describe('GalleryScreen Tests', () => {
     });
   });
 
-  it('handles image picker cancellation gracefully', async () => {
+  it('handles image picker cancellation', async () => {
     (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
       true,
     );

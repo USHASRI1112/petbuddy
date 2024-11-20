@@ -6,8 +6,9 @@ global.fetch = jest.fn();
 Alert.alert = jest.fn();
 
 describe('Activity Component', () => {
-    beforeEach(()=>{
-        jest.clearAllMocks()
+    afterEach(()=>{
+        // jest.clearAllMocks()
+        jest.resetAllMocks()
     })
     it('should render activities correctly', async () => {
         const mockActivities = [

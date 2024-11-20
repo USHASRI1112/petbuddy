@@ -10,6 +10,13 @@ import { Alert } from 'react-native';
 import { API_URL } from '../API';
 import AddPetModal from '../src/components/AddPetModal';
 
+
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  setItem: jest.fn(),
+  getItem: jest.fn(),
+  removeItem: jest.fn(),
+}))
+
 jest.mock('react-native-permissions', () => ({
   check: jest.fn(() => Promise.resolve('granted')),
   request: jest.fn(() => Promise.resolve('granted')),
@@ -96,11 +103,12 @@ describe('Test for profile Screen', () => {
   it('should call handleSignOut when Sign Out button is clicked', async () => {
     const setUser = jest.fn();
     const navigate = jest.fn();
+    const replace=jest.fn()
 
     const {getByText} = render(
       <NavigationContainer>
         <UserContext.Provider value={{user, setUser}}>
-          <Profile navigation={{setOptions: jest.fn(), navigate}} />
+          <Profile navigation={{setOptions: jest.fn(), replace}} />
         </UserContext.Provider>
       </NavigationContainer>,
     );
@@ -109,7 +117,7 @@ describe('Test for profile Screen', () => {
     fireEvent.press(signOutButton);
 
     await waitFor(() => {
-      expect(navigate).toHaveBeenCalledWith('Main');
+      expect(replace).toHaveBeenCalledWith('Main');
     });
   });
 
@@ -325,11 +333,10 @@ describe('Test for adding profile image', () => {
   });
 
 
-  // it('should call uploadPic function and give success', async () => {
+  // it.only('should call uploadPic function and give success', async () => {
   //   const mockImagePath = 'path.jpg';
   //   const mockBase64Image = 'Base64EncodedImage';
   //   const mockSetUser = jest.fn();
-
   //   (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
   //     true,
   //   );
@@ -366,24 +373,26 @@ describe('Test for adding profile image', () => {
   //     uri: `data:image/jpeg;base64,${mockBase64Image}`,
   //   });
 
-  //   global.fetch = jest.fn(() =>
-  //     Promise.resolve({
-  //       status: 200,
-  //       json: jest.fn().mockResolvedValue({name: 'Usha', token: '1234'}),
-  //     }),
-  //   ) as jest.Mock;
     
-    
+  //   (fetch as jest.Mock).mockResolvedValue({
+  //     status:200,
+  //     json:()=>({name:"Usha",password:"1234"})
+  //   })
+  //   // global.fetch = jest.fn().mockResolvedValue({
+  //   //   status:200,
+  //   //   json:()=>({name:"Usha",password:"1234"})
+  //   // })
   //   await waitFor(() => {
-  //     expect(fetch).toHaveBeenCalled()
-  //     // expect(fetch).toHaveBeenCalledWith(
-  //     //   `${API_URL}user/profile/${user.name}`,{
-  //     //     method: 'POST',
-  //     //     headers: { 'Content-Type': 'application/json' },
-  //     //     body: JSON.stringify({"profile":'data:image/jpeg;base64,Base64EncodedImage'})
-  //     //   }
-  //     // );
-  //     //  expect(mockSetUser).toHaveBeenCalledWith(user);
+  //     // expect(Alert.alert).toHaveBeenCalledWith("Error")
+  //      expect(fetch).toHaveBeenCalled()
+  //      expect(fetch).toHaveBeenCalledWith(
+  //       `${API_URL}user/profile/${user.name}`,{
+  //         method: 'POST',
+  //         headers: { 'Content-Type': 'application/json' },
+  //         body: JSON.stringify({"profile":'data:image/jpeg;base64,Base64EncodedImage'})
+  //       }
+  //     );
+  //     expect(mockSetUser).toHaveBeenCalledWith(user);
   //     // expect(Alert.alert).toHaveBeenCalledWith('Pic uploaded succesffully');
   //   });
   // });

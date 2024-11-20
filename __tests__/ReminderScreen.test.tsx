@@ -1,9 +1,9 @@
-import {render} from '@testing-library/react-native';
+import {render, screen} from '@testing-library/react-native';
 import Reminders from '../src/screens/Reminders/ReminderScreen';
 import React from 'react';
-import { fireEvent, waitFor, act} from '@testing-library/react-native';
+import {fireEvent, waitFor, act} from '@testing-library/react-native';
 import AddReminder from '../src/components/AddreminderModal';
-import { API_URL } from '../API';
+import {API_URL} from '../API';
 
 jest.mock('react-native-date-picker', () => {
   return {
@@ -12,7 +12,7 @@ jest.mock('react-native-date-picker', () => {
   };
 });
 
-global.fetch = jest.fn()
+global.fetch = jest.fn();
 describe('Test for remidners page', () => {
   const mockRoute = {
     params: {
@@ -33,12 +33,10 @@ describe('Test for remidners page', () => {
     expect(getByTestId('+-icon')).toBeTruthy();
   });
 
-  it
+  it;
 });
 
-jest.mock('./../src/components/AddreminderModal', () =>
-  jest.fn(() => null) 
-);
+jest.mock('./../src/components/AddreminderModal', () => jest.fn(() => null));
 
 describe('Reminders Component', () => {
   const mockPet = {
@@ -56,7 +54,7 @@ describe('Reminders Component', () => {
 
   it('should render the header and basic UI elements', () => {
     const {getByTestId, getByText} = render(
-      <Reminders route={{params: {pet: mockPet}}} />
+      <Reminders route={{params: {pet: mockPet}}} />,
     );
 
     expect(getByTestId('reminder-header').props.children).toBe('⏱ Reminders');
@@ -89,9 +87,9 @@ describe('Reminders Component', () => {
           remarks: 'Friendly dog',
         },
       },
-    }
-    const {getByText} = render(<Reminders route={mockRoute}  />);
- 
+    };
+    const {getByText} = render(<Reminders route={mockRoute} />);
+
     await waitFor(() => {
       expect(getByText('Walk the dog')).toBeTruthy();
       expect(getByText('On 16 Nov 2024 - 10:00 AM - 11:00 AM')).toBeTruthy();
@@ -113,16 +111,15 @@ describe('Reminders Component', () => {
 
   it('should toggle modal visibility when the "+" button is pressed', async () => {
     const {getByText, queryByTestId} = render(
-      <Reminders route={{params: {pet: mockPet}}} />
+      <Reminders route={{params: {pet: mockPet}}} />,
     );
     expect(queryByTestId('modal')).toBeFalsy();
     fireEvent.press(getByText('+'));
     expect(AddReminder).toHaveBeenCalledWith(
       expect.objectContaining({visible: true}),
-      {}
+      {},
     );
   });
-
 
   it('should handle API errors', async () => {
     (global.fetch as jest.Mock).mockRejectedValueOnce(new Error('API Error'));
@@ -131,6 +128,70 @@ describe('Reminders Component', () => {
 
     await waitFor(() => {
       expect(getByText('No reminders found: Try adding')).toBeTruthy();
+    });
+  });
+
+  it('should render reminders based on the type', async () => {
+    const mockReminders = [
+      {
+        title: 'Walk the dog',
+        date: '2024-11-16T00:00:00Z',
+        startTime: '2024-11-16T10:00:00Z',
+        endTime: '2024-11-16T11:00:00Z',
+        type: 'Daily',
+      },
+      {
+        title: 'Walk the dog - Weekly',
+        date: '2024-11-16T00:00:00Z',
+        startTime: '2024-11-16T10:00:00Z',
+        endTime: '2024-11-16T11:00:00Z',
+        type: 'Weekly',
+      },
+      {
+        title: 'Walk the dog - Monthly',
+        date: '2024-11-16T00:00:00Z',
+        startTime: '2024-11-16T10:00:00Z',
+        endTime: '2024-11-16T11:00:00Z',
+        type: 'Monthly',
+      },
+    ];
+
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      status: 200,
+      json: async () => mockReminders,
+    });
+    const mockRoute = {
+      params: {
+        pet: {
+          name: 'Buddy',
+          age: 3,
+          weight: 15,
+          height: 50,
+          color: 'Brown',
+          remarks: 'Friendly dog',
+        },
+      },
+    };
+    const {getByText,getByTestId} = render(<Reminders route={mockRoute} />);
+    const dailyTypeButton = getByTestId("daily-type")
+    const weeklyTypeButton = getByTestId("weekly-type")
+    const monthlyTypeButton = getByTestId("monthly-type")
+    fireEvent.press(dailyTypeButton)
+    await waitFor(() => {
+      expect(getByText('Walk the dog')).toBeTruthy();
+      expect(getByText('On 16 Nov 2024 - 10:00 AM - 11:00 AM')).toBeTruthy();
+    });
+
+    fireEvent.press(weeklyTypeButton)
+    await waitFor(() => {
+      expect(getByText('Walk the dog')).toBeTruthy();
+      expect(getByText('On 16 Nov 2024 - 10:00 AM - 11:00 AM')).toBeTruthy();
+    });
+
+    fireEvent.press(monthlyTypeButton)
+    await waitFor(() => {
+      expect(getByText('Walk the dog')).toBeTruthy();
+      expect(getByText('On 16 Nov 2024 - 10:00 AM - 11:00 AM')).toBeTruthy();
     });
   });
 });

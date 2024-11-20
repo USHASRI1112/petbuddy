@@ -93,6 +93,23 @@ describe('Login Component', () => {
       expect(mockNavigation.replace).not.toHaveBeenCalled();
     });
   });
+  it('displays an user not found alert', async () => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        status: 404,
+      }),
+    ) as jest.Mock;
+
+    const {getByText, getByPlaceholderText} = renderComponent();
+    fireEvent.changeText(getByPlaceholderText('User name'), 'wronguser');
+    fireEvent.changeText(getByPlaceholderText('Password'), 'wrongpassword');
+    fireEvent.press(getByText('LOGIN'));
+
+    await waitFor(() => {
+      expect(Alert.alert).toHaveBeenCalledWith('User Details not found')
+      expect(mockNavigation.replace).not.toHaveBeenCalled();
+    });
+  });
 
   it('logs in successfully and navigates to Home screen', async () => {
     global.fetch = jest.fn(() =>

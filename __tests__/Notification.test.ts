@@ -38,6 +38,7 @@ describe('Reminder Notification Functions', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.useFakeTimers()
     global.Date.now = jest.fn(() => new Date('2024-11-19T10:00:00Z').getTime());
     consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
   });
@@ -84,24 +85,6 @@ describe('Reminder Notification Functions', () => {
       },
     );
   });
-
-//   it.only('should schedule a monthly reminder with recursive notifications', async () => {
-//     const reminderData = {type: 'Monthly'};
-//     const triggerTime = new Date('2024-11-19T10:00:00Z');
-
-//     await scheduleNotification(
-//       'Monthly Reminder',
-//       'Do something monthly',
-//       triggerTime,
-//       reminderData,
-//       false,
-//     );
-
-//     // await waitFor(()=>{
-//     //     expect(notifee.createTriggerNotification).toHaveBeenCalledTimes(1);
-//     // })
-
-//   });
 
   it('should handle errors in scheduleNotification', async () => {
     (notifee.createTriggerNotification as jest.Mock).mockImplementation(() => {
@@ -171,3 +154,4 @@ describe('Reminder Notification Functions', () => {
     );
   });
 });
+
