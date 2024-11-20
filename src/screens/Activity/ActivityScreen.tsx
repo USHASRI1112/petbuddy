@@ -19,8 +19,6 @@ const Activity = ({route}: {route: any}) => {
       if (response.status === 200) {
         const data = await response.json();
         setActivities(data);
-      } else if(response.status===400) {
-       Alert.alert("Something went wrong.")
       }
     } catch (e) {
       Alert.alert(`${e}`)
