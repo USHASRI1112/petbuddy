@@ -1,6 +1,6 @@
 name: PetBuddy
 on: 
-  pulsh:
+  push:
     branches:
       - master
       - petbuddy/version-1
