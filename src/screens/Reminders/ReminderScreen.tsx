@@ -46,13 +46,12 @@ const Reminders = ({route}: {route: any}) => {
   const fetchReminders = async () => {
     try {
       const response = await fetch(`${API_URL}pets/reminders/${pet.name}`);
+     console.log(response)
       if (response.status === 200) {
         const data = await response.json();
         const finaldata = data.filter((item: any) => item.type === current);
         setReminders(finaldata);
-      } else {
-        console.log('Something went wrong.');
-      }
+      } 
     } catch (e) {
       console.log('Error fetching data');
     }
@@ -78,17 +77,19 @@ const Reminders = ({route}: {route: any}) => {
       </View>
       <View style={styles.typesDisplay}>
         <TouchableOpacity
+        testID="daily-type" 
           style={current === 'Daily' ? styles.selectedType : styles.type}
           onPress={() => setCurrent('Daily')}>
           <Text>Daily</Text>
         </TouchableOpacity>
         <TouchableOpacity
+        testID="weekly-type" 
           style={current === 'Weekly' ? styles.selectedType : styles.type}
           onPress={() => setCurrent('Weekly')}>
           <Text>Weekly</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={current === 'Monthly' ? styles.selectedType : styles.type}
+         testID="monthly-type" style={current === 'Monthly' ? styles.selectedType : styles.type}
           onPress={() => setCurrent('Monthly')}>
           <Text>Monthly</Text>
         </TouchableOpacity>
