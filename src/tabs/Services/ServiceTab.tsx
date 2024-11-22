@@ -52,7 +52,7 @@ const Services = () => {
             onPress={() => setCurrent('veternity')}>
             <Image
               testID="vaternity-image"
-              style={styles.image}
+              style={[current==='veternity' ? styles.selectedImage :styles.image]}
               source={require('./../../../public/assets/Services/veternity.png')}
             />
             <Text style={[current === 'veternity' && styles.greenText]}>
@@ -63,7 +63,7 @@ const Services = () => {
             style={styles.type}
             onPress={() => setCurrent('boarding')}>
             <Image
-              style={styles.image}
+              style={[current==='boarding' ? styles.selectedImage :styles.image]}
               source={require('./../../../public/assets/Services/boarding.png')}
             />
             <Text style={[current === 'boarding' && styles.greenText]}>
@@ -74,7 +74,7 @@ const Services = () => {
             style={styles.type}
             onPress={() => setCurrent('grooming')}>
             <Image
-              style={styles.image}
+              style={[current==='grooming' ? styles.selectedImage :styles.image]}
               source={require('./../../../public/assets/Services/grooming.png')}
             />
             <Text style={[current === 'grooming' && styles.greenText]}>
@@ -85,7 +85,7 @@ const Services = () => {
             style={styles.type}
             onPress={() => setCurrent('training')}>
             <Image
-              style={styles.image}
+              style={[current==='training' ? styles.selectedImage :styles.image]}
               source={require('./../../../public/assets/Services/training.png')}
             />
             <Text style={[current === 'training' && styles.greenText]}>
@@ -116,65 +116,87 @@ const Services = () => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1, 
     justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    alignItems: 'center', 
+    backgroundColor: '#f9f9f9',
+    paddingTop: 20,
   },
   topSection: {
-    flexDirection: 'column',
-    marginHorizontal: 30,
-    marginVertical: 30,
+    width: '90%', 
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
   },
   topHeading: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    margin: 10,
+    marginVertical: 10,
+    textAlign: 'center', 
+    color: '#333',
   },
   typesSection: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-around', 
     alignItems: 'center',
-    gap: 20,
+    width: '100%',
+    marginVertical: 20,
   },
   type: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    gap: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
-    height: 50,
-    width: 50,
+    height: 60,
+    width: 60,
     borderRadius: 10,
   },
+  selectedImage:{
+    height: 60,
+    width: 60,
+    borderRadius: 10,
+    borderWidth:1,
+    borderColor:'forestgreen'
+ },
   greenText: {
     color: 'green',
+    marginTop: 8,
+    fontWeight: 'bold',
   },
   bottomSection: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    margin: 20,
+    flex: 1, 
+    width: '100%', 
+    justifyContent: 'flex-start', 
+    alignItems: 'center',
+    paddingHorizontal: 20,
   },
   nearbyHeadingSection: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between', 
     alignItems: 'center',
-    gap: 10,
+    width: '100%',
+    marginBottom: 10,
   },
   nearByHeading: {
     fontSize: 20,
     fontWeight: 'bold',
+    color: '#333',
   },
   seeAllText: {
-    color: 'gray',
-    // fontSize:20
+    fontSize: 16,
+    color: '#007bff', 
+    fontWeight: 'bold',
   },
-  displaySection:{
-    flexDirection:'column',
-    justifyContent:'flex-start',
-    gap:40
-  }
+  displaySection: {
+    width: '100%',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
 });
+
 
 export default Services;
