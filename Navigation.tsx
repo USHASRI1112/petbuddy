@@ -13,7 +13,7 @@ import Reminders from './src/screens/Reminders/ReminderScreen';
 import PetScreen from './src/screens/PetScreen/PetScreen';
 import Profile from './src/screens/Profile/ProfileScreen';
 import GalleryScreen from './src/screens/Gallery/GalleryScreen';
-import {Image, Text, View} from 'react-native';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {UserContext} from './src/Context/Context';
 import Loader from './src/screens/Loader/LoaderScreen';
@@ -38,7 +38,11 @@ export function StackNavigator() {
   );
 }
 
-export function TabNavigator(): React.JSX.Element {
+export function TabNavigator({
+  navigation,
+}: {
+  navigation: any;
+}): React.JSX.Element {
   return (
     <Tab.Navigator
       initialRouteName={'HomeScreen'}
@@ -93,8 +97,54 @@ export function TabNavigator(): React.JSX.Element {
         component={StackNavigator}
         options={{headerShown: false}}
       />
-      <Tab.Screen name="Services" component={Services} />
-      <Tab.Screen name="Training" component={Training} />
+      <Tab.Screen
+        name="Services"
+        component={Services}
+        options={{
+          headerTitle: 'Services',
+          headerStyle: {backgroundColor: 'green'},
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{
+                padding: 4,
+                backgroundColor: 'green',
+                flexDirection: 'column',
+                alignItems: 'center',
+                marginLeft: 10,
+              }}
+              onPress={() => navigation.reset({
+                index: 0,
+                routes: [{ name: 'Home' }],
+              })}>
+              <Text>{'<'}</Text>
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Training"
+        component={Training}
+        options={{
+          headerTitle: 'Training',
+          headerStyle: {backgroundColor: 'green'},
+          headerLeft: () => (
+            <TouchableOpacity
+              style={{
+                padding: 4,
+                backgroundColor: 'green',
+                flexDirection: 'column',
+                alignItems: 'center',
+                marginLeft: 10,
+              }}
+              onPress={() => navigation.reset({
+                index: 0,
+                routes: [{ name: 'Home' }],
+              })}>
+              <Text>{'<'}</Text>
+            </TouchableOpacity>
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -222,5 +272,4 @@ export function AppNavigator() {
   //   // </Stack.Navigator>
   //   {loggedInUser? <HomeStack/> : <MainStack/>}
   // );
-
 }
