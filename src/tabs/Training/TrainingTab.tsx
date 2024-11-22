@@ -84,8 +84,11 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 20,
     padding: 15,
-    backgroundColor: 'lightgray',
+    backgroundColor: '#E0F2E9',
     borderRadius: 10,
+    flexDirection:'column',
+    // justifyContent:'center',
+    // alignItems:'center'
   },
   sectionTitle: {
     fontSize: 20,
@@ -102,6 +105,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'forestgreen',
     paddingVertical: 8,
     borderRadius: 5,
+    width:'80%',
+    alignSelf:'center'
   },
   linkText: {
     color: 'white',
