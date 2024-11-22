@@ -56,85 +56,85 @@ const Tile = ({service}: {service: any}) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 20,
-    backgroundColor: 'white',
-    borderColor: 'black',
-    padding: 10,
-    width: 270,
-    borderRadius: 10,
-    shadowColor: 'gray',
-    shadowOpacity: 0.3,
-    shadowRadius: 3.84,
+    width: '100%',
+    backgroundColor: '#fff', 
+    borderRadius: 15,
+    padding: 20,
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+    marginBottom: 20,
+    alignSelf: 'center', 
   },
-
   topSection: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
-  },
-  image: {
-    height: 50,
-    width: 50,
-    resizeMode: 'stretch',
-    borderRadius: 10,
-  },
-  details: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    gap: 3,
-  },
-  name: {
-    color: 'black',
-    fontWeight: 'bold',
-    fontSize: 15,
-  },
-  desig: {
-    color: 'gray',
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
-  ratings: {
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
-  topBottomSection: {
-    flexDirection: 'row',
-  },
-  star: {
-    color: 'orange',
-  },
-  middleSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    gap: 20,
-    marginTop: 5,
-  },
-  experience: {
-    color: 'gray',
-    fontSize: 13,
-  },
-  distance: {
-    color: 'gray',
-    fontSize: 13,
-  },
-  minFee: {
-    color: 'gray',
-    fontSize: 13,
-  },
-  bottomPage: {
-    margin: 4,
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
-  bottomText: {
-    fontSize: 10,
+  image: {
+    height: 70,
+    width: 70,
+    borderRadius: 10,
+    marginRight: 15,
+  },
+  details: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start', 
+  },
+  name: {
+    fontSize: 18,
     fontWeight: 'bold',
-    color: 'gray',
+    color: '#333',
+  },
+  desig: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 5,
+  },
+  topBottomSection: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start', 
+    alignItems: 'center',
+    gap: 5,
+  },
+  star: {
+    fontSize: 18,
+    color: '#ffcc00', 
+  },
+  ratings: {
+    fontSize: 12,
+    color: '#888',
+  },
+  middleSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+     marginVertical: 10,
+  },
+  experience: {
+    fontSize: 14,
+    color: '#555',
+  },
+  distance: {
+    fontSize: 14,
+    color: '#555',
+  },
+  minFee: {
+    fontSize: 14,
+    color: '#555',
+  },
+  bottomPage: {
+    justifyContent: 'flex-start', 
+    alignItems: 'flex-start', 
+  },
+  bottomText: {
+    fontSize: 12,
+    color: '#888',
   },
 });
+
 
 export default Tile;
