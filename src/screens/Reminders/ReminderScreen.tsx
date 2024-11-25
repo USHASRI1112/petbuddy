@@ -46,7 +46,6 @@ const Reminders = ({route}: {route: any}) => {
   const fetchReminders = async () => {
     try {
       const response = await fetch(`${API_URL}pets/reminders/${pet.name}`);
-     console.log(response)
       if (response.status === 200) {
         const data = await response.json();
         const finaldata = data.filter((item: any) => item.type === current);
