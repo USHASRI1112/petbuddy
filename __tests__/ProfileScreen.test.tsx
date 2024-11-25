@@ -6,16 +6,15 @@ import {NavigationContainer} from '@react-navigation/native';
 import * as Permissions from './../src/components/Permissions';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import RNFS from 'react-native-fs';
-import { Alert } from 'react-native';
-import { API_URL } from '../API';
+import {Alert} from 'react-native';
+import {API_URL} from '../API';
 import AddPetModal from '../src/components/AddPetModal';
-
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
   setItem: jest.fn(),
   getItem: jest.fn(),
   removeItem: jest.fn(),
-}))
+}));
 
 jest.mock('react-native-permissions', () => ({
   check: jest.fn(() => Promise.resolve('granted')),
@@ -67,9 +66,9 @@ jest.mock('./../src/components/Permissions', () => ({
   requestPhotoLibraryPermission: jest.fn(),
 }));
 
-jest.mock('./../src/components/AddPetModal',()=>jest.fn())
-global.fetch = jest.fn()
-Alert.alert = jest.fn()
+jest.mock('./../src/components/AddPetModal', () => jest.fn());
+global.fetch = jest.fn();
+Alert.alert = jest.fn();
 
 const user = {
   name: 'Usha',
@@ -103,7 +102,7 @@ describe('Test for profile Screen', () => {
   it('should call handleSignOut when Sign Out button is clicked', async () => {
     const setUser = jest.fn();
     const navigate = jest.fn();
-    const replace=jest.fn()
+    const replace = jest.fn();
 
     const {getByText} = render(
       <NavigationContainer>
@@ -164,28 +163,23 @@ describe('Test for profile Screen', () => {
     });
   });
 
-  // it('should toggle Add Pet modal visibility when Add Pet is clicked', async () => {
-  //   const setUser = jest.fn();
+  it('should toggle Add Pet modal visibility when Add Pet is clicked', async () => {
+    const setUser = jest.fn();
 
-  //   const { getByText, getByTestId } = render(
-  //     <NavigationContainer>
-  //       <UserContext.Provider value={{ user, setUser }}>
-  //         <Profile navigation={{ setOptions: jest.fn(), navigate: jest.fn() }} />
-  //       </UserContext.Provider>
-  //     </NavigationContainer>
-  //   );
-  //   expect(getByTestId('add-pet-modal')).toHaveProp('visible', false);
+    const {getByText, getByTestId} = render(
+      <NavigationContainer>
+        <UserContext.Provider value={{user, setUser}}>
+          <Profile navigation={{setOptions: jest.fn(), navigate: jest.fn()}} />
+        </UserContext.Provider>
+      </NavigationContainer>,
+    );
 
-  //   const addPetButton = getByText('🐾 Add Pet');
-  //   fireEvent.press(addPetButton);
-  //   await waitFor(() => {
-  //     expect(getByTestId('add-pet-modal')).toHaveProp('visible', true);
-  //   });
-  //   fireEvent.press(getByText('Close'));
-  //   await waitFor(() => {
-  //     expect(getByTestId('add-pet-modal')).toHaveProp('visible', false);
-  //   });
-  // });
+    const addPetButton = getByText('🐾 Add Pet');
+    fireEvent.press(addPetButton);
+    await waitFor(() => {
+      expect(getByTestId('add-pet-modal')).toBeTruthy();
+    });
+  });
 });
 
 describe('Test for adding profile image', () => {
@@ -259,6 +253,32 @@ describe('Test for adding profile image', () => {
       expect(Permissions.requestPhotoLibraryPermission).toHaveBeenCalledTimes(
         1,
       );
+      expect(Alert.alert).toHaveBeenCalledWith("Permission Not Granted")
+    });
+  });
+  
+  it('should show an alert if permission is not granted', async () => {
+    (Permissions.requestPhotoLibraryPermission as jest.Mock).mockRejectedValueOnce(
+      new Error("Something went wrong"),
+    );
+
+    const setUser = jest.fn();
+    const {getByText, getByTestId} = render(
+      <NavigationContainer>
+        <UserContext.Provider value={{user, setUser}}>
+          <Profile navigation={{setOptions: jest.fn(), navigate: jest.fn()}} />
+        </UserContext.Provider>
+      </NavigationContainer>,
+    );
+
+    const uploadButton = getByTestId('handle-image');
+    fireEvent.press(uploadButton);
+
+    await waitFor(() => {
+      expect(Permissions.requestPhotoLibraryPermission).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(Alert.alert).toHaveBeenCalledWith("Error")
     });
   });
 
@@ -329,9 +349,8 @@ describe('Test for adding profile image', () => {
     const addPetButton = getByText('🐾 Add Pet');
     fireEvent.press(addPetButton);
     fireEvent.press(addPetButton);
-    expect(queryByTestId('add-pet-modal')).toBeTruthy(); 
+    expect(queryByTestId('add-pet-modal')).toBeTruthy();
   });
-
 
   // it.only('should call uploadPic function and give success', async () => {
   //   const mockImagePath = 'path.jpg';
@@ -373,7 +392,6 @@ describe('Test for adding profile image', () => {
   //     uri: `data:image/jpeg;base64,${mockBase64Image}`,
   //   });
 
-    
   //   (fetch as jest.Mock).mockResolvedValue({
   //     status:200,
   //     json:()=>({name:"Usha",password:"1234"})
