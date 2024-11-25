@@ -53,11 +53,9 @@ const Profile = ({navigation}: {navigation: any}) => {
         const user = await response.json();
         setUser(user);
         Alert.alert('Pic uploaded succesffully');
-      } else {
-        Alert.alert('Something went wrong, Try again later');
       }
     } catch (e) {
-      Alert.alert(`${e}`);
+      Alert.alert(`Something went wrong`);
     }
   };
   const handleImage = async () => {
@@ -99,7 +97,7 @@ const Profile = ({navigation}: {navigation: any}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID='profile-container'>
       <TouchableOpacity testID="handle-image" onPress={() => handleImage()}>
         {user.image_uri ? (
           <Image
