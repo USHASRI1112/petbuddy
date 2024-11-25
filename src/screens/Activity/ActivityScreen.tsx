@@ -16,6 +16,7 @@ const Activity = ({route}: {route: any}) => {
   const fetchActivities = async () => {
     try {
       const response = await fetch(`${API_URL}pets/activities/${pet.name}`);
+      console.log(response)
       if (response.status === 200) {
         const data = await response.json();
         setActivities(data);
