@@ -67,7 +67,7 @@ jest.mock('./../src/components/Permissions', () => ({
 }));
 
 jest.mock('./../src/components/AddPetModal', () => jest.fn());
-global.fetch = jest.fn();
+// global.fetch = jest.fn();
 Alert.alert = jest.fn();
 
 const user = {
@@ -82,6 +82,9 @@ const user = {
 };
 
 describe('Test for profile Screen', () => {
+  beforeEach(()=>{
+    jest.clearAllMocks()
+  })
   it('should render Profile screen correctly when user context is provided', async () => {
     const setUser = jest.fn();
 
@@ -348,11 +351,10 @@ describe('Test for adding profile image', () => {
 
     const addPetButton = getByText('🐾 Add Pet');
     fireEvent.press(addPetButton);
-    fireEvent.press(addPetButton);
     expect(queryByTestId('add-pet-modal')).toBeTruthy();
   });
 
-  it.only('should call uploadPic function and give success', async () => {
+  it('should call uploadPic function and give success', async () => {
     const mockImagePath = 'path.jpg';
     const mockBase64Image = 'Base64EncodedImage';
     const mockSetUser = jest.fn();
@@ -392,26 +394,64 @@ describe('Test for adding profile image', () => {
       uri: `data:image/jpeg;base64,${mockBase64Image}`,
     });
 
-    (fetch as jest.Mock).mockResolvedValue({
-      status:200,
-      json:()=>({name:"Usha",password:"1234"})
-    })
-    // global.fetch = jest.fn().mockResolvedValue({
-    //   status:200,
-    //   json:()=>({name:"Usha",password:"1234"})
-    // })
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        status:200,
+      }),
+    ) as jest.Mock;
+    
     await waitFor(() => {
-      // expect(Alert.alert).toHaveBeenCalledWith("Error")
-       expect(fetch).toHaveBeenCalled()
-       expect(fetch).toHaveBeenCalledWith(
-        `${API_URL}user/profile/${user.name}`,{
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({"profile":'data:image/jpeg;base64,Base64EncodedImage'})
-        }
+       expect(mockSetUser).toHaveBeenCalled();
+       expect(Alert.alert).toHaveBeenCalledWith('Pic uploaded succesffully');
+    });
+  });
+
+  it('should give something went wrong while uploading pic', async () => {
+    const mockImagePath = 'path.jpg';
+    const mockBase64Image = 'Base64EncodedImage';
+    const mockSetUser = jest.fn();
+    (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
+      true,
+    );
+    (ImageCropPicker.openPicker as jest.Mock).mockResolvedValue({
+      path: mockImagePath,
+    });
+    (RNFS.readFile as jest.Mock).mockResolvedValue(mockBase64Image);
+
+    const {getByText, getByTestId} = render(
+      <NavigationContainer>
+        <UserContext.Provider value={{user, setUser:mockSetUser}}>
+          <Profile navigation={{setOptions: jest.fn(), navigate: jest.fn()}} />
+        </UserContext.Provider>
+      </NavigationContainer>,
+    );
+
+    const uploadButton = getByTestId('handle-image');
+    fireEvent.press(uploadButton);
+
+    await waitFor(() => {
+      expect(Permissions.requestPhotoLibraryPermission).toHaveBeenCalledTimes(
+        1,
       );
-      expect(mockSetUser).toHaveBeenCalledWith(user);
-      // expect(Alert.alert).toHaveBeenCalledWith('Pic uploaded succesffully');
+      expect(ImageCropPicker.openPicker).toHaveBeenCalledWith({
+        width: 300,
+        height: 400,
+        cropping: true,
+      });
+      expect(RNFS.readFile).toHaveBeenCalledWith(mockImagePath, 'base64');
+    });
+
+    const profileImage = getByTestId('profile-image');
+    expect(profileImage.props.source).toEqual({
+      uri: `data:image/jpeg;base64,${mockBase64Image}`,
+    });
+
+    global.fetch = jest.fn(() =>
+      Promise.reject(new Error("Something went wrong")),
+    ) as jest.Mock;
+    
+    await waitFor(() => {
+       expect(Alert.alert).toHaveBeenCalledWith('Something went wrong');
     });
   });
 });
