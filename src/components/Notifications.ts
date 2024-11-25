@@ -60,7 +60,9 @@ export async function scheduleNotification(
       repeatFrequency:
         reminderData.type === 'Daily'
           ? RepeatFrequency.DAILY
-          : reminderData.type==="Weekly" ? RepeatFrequency.WEEKLY : undefined,
+          : reminderData.type === 'Weekly'
+          ? RepeatFrequency.WEEKLY
+          : undefined,
     };
     const notificationPayload = {
       title,
@@ -92,7 +94,7 @@ export async function scheduleNotification(
     if (reminderData.type === 'Monthly' && next) {
       scheduleNotification(title, body, next, reminderData, isEndNotification);
     }
-  } catch (error:any) {
+  } catch (error: any) {
     console.log(`Error scheduling notification: ${error.message}`);
   }
 }
@@ -139,7 +141,7 @@ export const fetchAndScheduleReminders = async () => {
         }
       });
     }
-  } catch (error:any) {
+  } catch (error: any) {
     console.log(`Error fetching reminders: ${error.message}`);
   }
 };
