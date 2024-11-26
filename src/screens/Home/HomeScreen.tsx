@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     backgroundColor: 'white',
-    width: '95%',
+    margin:'3%',
     height: '7%',
     alignItems: 'center',
     padding: 10,
@@ -170,7 +170,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgreen',
     padding: 10,
     borderRadius: 20,
-    margin: '10%',
+    margin: '2%',
   },
   petsDisplaySection: {
     flexDirection: 'column',
