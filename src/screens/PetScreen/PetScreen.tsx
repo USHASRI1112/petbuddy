@@ -9,6 +9,8 @@ import {
   Linking,
   Alert,
   ScrollView,
+  Image,
+  Dimensions,
 } from 'react-native';
 import TrackModal from '../../components/TrackModal';
 import {requestCallPermission} from '../../components/Permissions';
@@ -70,19 +72,19 @@ const PetScreen = ({navigation, route}: {navigation: any; route: any}) => {
     <View style={styles.container}>
       <View>
         {!pet.image_uri ? (
-          <ImageBackground
+          <Image
             testID="dog-image"
             style={styles.dogImage}
             source={
               pet.image_uri
                 ? {uri: pet.image_uri}
                 : require('./../../../public/assets/Home/dog.png')
-            }></ImageBackground>
+            }></Image>
         ) : (
-          <ImageBackground
+          <Image
             testID="dog-image"
             style={styles.dogImage}
-            source={{uri: pet.image_uri}}></ImageBackground>
+            source={{uri: pet.image_uri}}></Image>
         )}
       </View>
       <ScrollView contentContainerStyle={styles.bottomSection}>
@@ -152,9 +154,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dogImage: {
-    width: Platform.OS === 'android' ? 500 : 400,
-    height: Platform.OS === 'android' ? 500 : 400,
-    resizeMode: 'contain',
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height / 2.2,
+    resizeMode: 'stretch',
   },
   topSection: {
     flex: 1,
