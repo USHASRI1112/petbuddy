@@ -7,6 +7,7 @@ import {
   Platform,
   TouchableOpacity,
   Alert,
+  Dimensions,
 } from 'react-native';
 import {UserContext} from '../../Context/Context';
 import AddPetModal from '../../components/AddPetModal';
@@ -155,8 +156,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: Platform.OS === 'android' ? 500 : 400,
-    height: Platform.OS === 'android' ? 400 : 300,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height / 2.2,
     resizeMode: 'stretch',
   },
   subContainer: {
