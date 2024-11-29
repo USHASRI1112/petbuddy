@@ -49,7 +49,7 @@ const Home = ({navigation}: {navigation: any}) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: '',
-      headerLeft: () => <Text>{user.name}</Text>,
+      headerLeft: () => <Text style={styles.headerName}>{user.name}</Text>,
       headerRight: () => (
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Image
@@ -112,6 +112,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 10,
+  },
+  headerName:{
+    color:'white',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   headerText: {
     fontSize: 20,
