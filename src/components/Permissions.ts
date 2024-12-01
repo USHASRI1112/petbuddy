@@ -12,7 +12,7 @@ export const requestPhotoLibraryPermission = async () => {
           return false;
         }
       }
-    } else if(Platform.OS==="android"){
+    } else{
       const permissionStatus = await check(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES);
       if (permissionStatus === RESULTS.DENIED || RESULTS.BLOCKED) {
         const requestStatus = await request(PERMISSIONS.ANDROID.READ_MEDIA_IMAGES); 
@@ -31,7 +31,6 @@ export const requestPhotoLibraryPermission = async () => {
 
 export const requestCallPermission = async () => {
   try {
-    if (Platform.OS === 'android') {
       const permissionStatus = await check(PERMISSIONS.ANDROID.CALL_PHONE);
       if (permissionStatus === RESULTS.DENIED) {
         const requestStatus = await request(PERMISSIONS.ANDROID.CALL_PHONE);
@@ -40,7 +39,6 @@ export const requestCallPermission = async () => {
           return false;
         }
       }
-    }
     return true;
   } catch (e) {
     Alert.alert('Error', 'An error occurred while checking Call permission.');
