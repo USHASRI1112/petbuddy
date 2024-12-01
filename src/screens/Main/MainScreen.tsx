@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   description:{
     color:'gray',
     fontWeight:'bold',
-    fontSize:Platform.OS === "android" ? 18 : 15,
+    fontSize:18,
     textAlign:'center',
   },
   getStartedButton:{
