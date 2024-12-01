@@ -82,6 +82,7 @@ describe('GalleryScreen Tests', () => {
     const mockImages = ['image1', 'image2'];
 
     (fetch as jest.Mock).mockResolvedValueOnce({
+      ok:true,
       status: 200,
       json: jest.fn().mockResolvedValue(mockImages),
     });
