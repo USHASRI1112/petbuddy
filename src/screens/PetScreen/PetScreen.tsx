@@ -73,12 +73,9 @@ const PetScreen = ({navigation, route}: {navigation: any; route: any}) => {
       <View>
         {!pet.image_uri ? (
           <Image
-            testID="dog-image"
+            testID="no-dog-image"
             style={styles.dogImage}
-            source={
-              pet.image_uri
-                ? {uri: pet.image_uri}
-                : require('./../../../public/assets/Home/dog.png')
+            source={require('./../../../public/assets/Home/dog.png')
             }></Image>
         ) : (
           <Image
@@ -135,6 +132,7 @@ const PetScreen = ({navigation, route}: {navigation: any; route: any}) => {
           <Text style={styles.galleryText}>{'Gallery    >'}</Text>
         </TouchableOpacity>
         <TouchableOpacity
+        testID='track-button'
           style={styles.track}
           onPress={() => setIsVisible(!isVisible)}>
           <Text style={styles.trackText}>Track</Text>
