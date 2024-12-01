@@ -65,7 +65,7 @@ describe('Register Component', () => {
 
   it('should trigger handle register function', async () => {
     const mockNavigation = {replace: jest.fn()};
-    const {getByTestId, getByPlaceholderText, getByText} = render(
+    const {getByPlaceholderText, getByText} = render(
       <Register navigation={mockNavigation} />,
     );
 
@@ -113,7 +113,7 @@ describe('Register Component', () => {
 
   it('should fail as password and confirm password mismatch', async () => {
     const mockNavigation = {replace: jest.fn()};
-    const {getByTestId, getByPlaceholderText, getByText} = render(
+    const {getByPlaceholderText, getByText} = render(
       <Register navigation={mockNavigation} />,
     );
 
@@ -132,7 +132,7 @@ describe('Register Component', () => {
 
   it('should trigger handle register function', async () => {
     const mockNavigation = {replace: jest.fn()};
-    const {getByTestId, getByPlaceholderText, getByText} = render(
+    const {getByPlaceholderText, getByText} = render(
       <Register navigation={mockNavigation} />,
     );
 
@@ -175,7 +175,7 @@ describe('Register Component', () => {
 
   it("should throw error",async()=>{
     const mockNavigation = {replace: jest.fn()};
-    const {getByTestId, getByPlaceholderText, getByText} = render(
+    const {getByText} = render(
       <Register navigation={mockNavigation} />,
     );
 
