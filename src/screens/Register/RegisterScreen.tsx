@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
     color: 'white',
     backgroundColor: 'green',
     paddingVertical: 20,
-    width: Platform.OS === 'android' ? 500 : 400,
+    width:500,
     textAlign: 'center',
   },
 });
