@@ -23,10 +23,10 @@ const PetScreen = ({navigation, route}: {navigation: any; route: any}) => {
       testID="back-button"
       onPress={() => navigation.goBack()}
       style={{
-        padding: 4,
+        padding: 10,
         backgroundColor: 'green',
-        flexDirection: 'column',
         alignItems: 'center',
+        borderRadius:50,
       }}>
       <Text style={{fontSize: 18, color: 'white'}}>{'<'}</Text>
     </TouchableOpacity>
