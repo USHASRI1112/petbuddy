@@ -19,7 +19,6 @@ const GalleryScreen = ({route}: {route: any}) => {
   const [gallery, setGallery] = useState([]);
 
   const updatePic = async (path:string) => {
-    if (path) {
       try {
         const response = await fetch(`${API_URL}pets/gallery/${pet.name}`, {
           method: 'POST',
@@ -38,16 +37,14 @@ const GalleryScreen = ({route}: {route: any}) => {
       } catch (e) {
         Alert.alert(`${e}`);
       }
-    }
   };
 
   const fetchImages = async () => {
     try {
       const resposne = await fetch(`${API_URL}pets/gallery/${pet.name}`);
-      if (resposne.status === 200) {
+      if (resposne.ok) {
         const data = await resposne.json();
         setGallery(data);
-        console.log(data);
       }
     } catch (e: any) {
       console.log(`Error fetching images:${e}`);
