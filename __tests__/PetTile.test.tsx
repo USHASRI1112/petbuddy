@@ -13,10 +13,23 @@ describe('Test for PEt File', () => {
     age: 2,
     gender: 'female',
   };
-  it('Should render pet image', () => {
+  const mockPet1 = {
+    _id: '1',
+    name: 'Puppy',
+    breed:'Puppy2',
+    age: 2,
+    gender: 'female',
+    image_uri:'image_uri'
+  };
+  it('Should render default pet image', () => {
     const {getByTestId} = render(<Pet navigation={jest.fn()} pet={mockPet} />);
+    expect(getByTestId('no-pet-image')).toBeTruthy();
+  });
+  it('Should render pet image', () => {
+    const {getByTestId} = render(<Pet navigation={jest.fn()} pet={mockPet1} />);
     expect(getByTestId('pet-image')).toBeTruthy();
   });
+
   it("should render pet name",()=>{
     const {getByText} = render(<Pet navigation={jest.fn()} pet={mockPet}/>)
     expect(getByText("Puppy")).toBeTruthy()
@@ -30,7 +43,5 @@ describe('Test for PEt File', () => {
     fireEvent.press(getByTestId("pet-details"))
     expect(mockNavigation.navigate).toHaveBeenCalledWith('Pet', {"pet": {"_id": "1", "age": 2, "breed": "Puppy2", "gender": "female", "name": "Puppy"}});
   })
-
-
 
 });
