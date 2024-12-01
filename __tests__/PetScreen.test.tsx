@@ -2,6 +2,7 @@ import { Alert, Linking, Platform } from 'react-native';
 import PetScreen from '../src/screens/PetScreen/PetScreen';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react-native';
 import * as Permissions from './../src/components/Permissions'
+import Track from '../src/components/TrackModal';
 
 jest.mock('react-native-permissions', () => ({
   check: jest.fn(() => Promise.resolve('granted')),
@@ -73,7 +74,7 @@ describe('Pet Screen Tests', () => {
     expect(getByText('Remarks')).toBeTruthy();
     expect(getByText('Gallery  >')).toBeTruthy();
     expect(getByText('Track')).toBeTruthy();
-    expect(getByTestId('dog-image')).toBeTruthy();
+    expect(getByTestId('no-dog-image')).toBeTruthy();
   });
 });
 
@@ -135,7 +136,7 @@ describe('PetScreen Layout', () => {
 
   it('should render all the pet details correctly', () => {
     render(<PetScreen navigation={mockNavigation} route={mockRoute} />);
-    expect(screen.getByTestId("dog-image")).toBeTruthy();
+    expect(screen.getByTestId("no-dog-image")).toBeTruthy();
     expect(screen.getByText("Buddy")).toBeTruthy();
     expect(screen.getByText("♂")).toBeTruthy();
     expect(screen.getByText("🐾About Buddy")).toBeTruthy();
@@ -163,10 +164,26 @@ describe('PetScreen Content', () => {
       },
     },
   };
+  const mockRoute1 = {
+    params: {
+      pet: {
+        name: 'Buddy',
+        breed: 'Golden Retriever',
+        emergencyContact: '9876543210',
+        gender: 'Male',
+        age: 5,
+        weight: 20,
+        height: 60,
+        color: 'Golden',
+        remarks: 'Friendly and playful.',
+        image_uri: 'image_uri',
+      },
+    },
+  };
 
   it('renders the pet details correctly', () => {
     const { getByText, getByTestId } = render(
-      <PetScreen navigation={mockNavigation} route={mockRoute} />
+      <PetScreen navigation={mockNavigation} route={mockRoute1} />
     );
 
     expect(getByText('Buddy')).toBeTruthy();
@@ -192,9 +209,23 @@ describe('PetScreen Content', () => {
 
     const trackButton = getByText('Track');
     fireEvent.press(trackButton);
-    expect(getByText('Track')).toBeTruthy();
+    expect(getByText('Reminders')).toBeTruthy();
+    expect(getByText('Activity')).toBeTruthy();
   });
 
+  it('should close the track modal',()=>{
+    const { getByTestId, queryByTestId } = render(
+      <PetScreen navigation={mockNavigation} route={mockRoute} />
+    );
+    const trackButton = getByTestId('track-button');
+    fireEvent.press(trackButton);
+    const trackModal = getByTestId('track-modal');
+    expect(trackModal).toBeTruthy();
+    const overlay = getByTestId('track-modal');
+    fireEvent.press(overlay);
+    expect(queryByTestId('track-modal')).toBeNull(); 
+  })
+ 
   it('should display an alert on iOS', async () => {
     Platform.OS = 'ios';
     const { getByTestId } = render(
