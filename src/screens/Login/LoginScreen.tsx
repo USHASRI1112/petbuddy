@@ -48,7 +48,7 @@ const Login = ({navigation}: {navigation: any}) => {
         }, 1000);
       } else if (response.status === 404) {
         Alert.alert('User Details not found');
-      } else if (response.status === 401) {
+      } else {
         Alert.alert('Invalid Credentials');
       }
     } catch (e) {
@@ -194,7 +194,7 @@ const styles = StyleSheet.create({
     color: 'white',
     backgroundColor: 'green',
     paddingVertical: 20,
-    width: Platform.OS === 'android' ? 500 : 400,
+    width: 500,
     textAlign: 'center',
   },
 });
