@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  Alert,
-} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Image, Alert} from 'react-native';
 import {API_URL} from '../../../API';
 
 const Activity = ({route}: {route: any}) => {
@@ -16,13 +9,14 @@ const Activity = ({route}: {route: any}) => {
   const fetchActivities = async () => {
     try {
       const response = await fetch(`${API_URL}pets/activities/${pet.name}`);
-      console.log(response)
-      if (response.status === 200) {
+      if (response.ok) {
         const data = await response.json();
         setActivities(data);
+      } else {
+        Alert.alert('Failed to fetch');
       }
     } catch (e) {
-      Alert.alert(`${e}`)
+      Alert.alert(`Something Went Wrong`);
     }
   };
   useEffect(() => {
@@ -32,22 +26,20 @@ const Activity = ({route}: {route: any}) => {
   function formatDate(dateString: any): string {
     const date = new Date(dateString);
     const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'short' });
+    const month = date.toLocaleString('default', {month: 'short'});
     const year = date.getFullYear();
     return `On ${day} ${month} ${year}`;
   }
-  
+
   function formatTimeRange(startTimeString: any, endTimeString: any): string {
     const formatTime = (dateString: string) => {
       const date = new Date(dateString);
-      const hours = date.getUTCHours(); 
-      const minutes = date.getUTCMinutes().toString().padStart(2, '0');; 
+      const hours = date.getUTCHours();
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
       const period = hours >= 12 ? 'PM' : 'AM';
       const formattedTime = `${hours % 12 || 12}:${minutes} ${period}`;
-
       return formattedTime;
     };
-
     return `${formatTime(startTimeString)} - ${formatTime(endTimeString)}`;
   }
 
@@ -58,9 +50,9 @@ const Activity = ({route}: {route: any}) => {
           ⏱ Activities
         </Text>
         {pet.image_uri ? (
-          <Image style={styles.image} source={{uri: pet.image_uri}} />
+          <Image testID="custom-image" style={styles.image} source={{uri: pet.image_uri}} />
         ) : (
-          <Image
+          <Image testID='default-image'
             style={styles.image}
             source={require('./../../../public/assets/Login/paw.png')}
           />
@@ -68,14 +60,17 @@ const Activity = ({route}: {route: any}) => {
       </View>
       <ScrollView style={styles.reminders}>
         {activities && activities.length > 0 ? (
-          activities.map((activity: any,index:any) => (
+          activities.map((activity: any, index: any) => (
             <View key={index} style={styles.reminderContent}>
               <View>
                 <Text>🐾</Text>
               </View>
               <View style={styles.reminderInfo}>
                 <Text style={styles.reminderTitle}>{activity.title}</Text>
-                <Text>{formatDate(activity.date)} - {formatTimeRange(activity.startTime,activity.endTime)}</Text>
+                <Text>
+                  {formatDate(activity.date)} -{' '}
+                  {formatTimeRange(activity.startTime, activity.endTime)}
+                </Text>
               </View>
             </View>
           ))
@@ -135,37 +130,35 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgreen',
     borderRadius: 10,
   },
-  reminders:{
-    marginHorizontal:'4%',
-    marginVertical:'5%',
+  reminders: {
+    marginHorizontal: '4%',
+    marginVertical: '5%',
   },
-  reminderContent:{
-    flexDirection:'row',
-    padding:10,
-    alignItems:'center',
-    gap:10,
-  }
-  ,
-  nodata:{
-    alignSelf:'center',
-    justifyContent:'center',
-    alignItems:'center'
-  }
-  ,
-  reminderInfo:{
-    flexDirection:'column',
-    justifyContent:'center',
-    gap:5,
+  reminderContent: {
+    flexDirection: 'row',
+    padding: 10,
+    alignItems: 'center',
+    gap: 10,
   },
-  reminderTitle:{
-    fontWeight:'bold',
-    fontSize:12
+  nodata: {
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  selectedType:{
+  reminderInfo: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: 5,
+  },
+  reminderTitle: {
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+  selectedType: {
     padding: 10,
     backgroundColor: 'forestgreen',
     borderRadius: 10,
-  }
+  },
 });
 
 export default Activity;
