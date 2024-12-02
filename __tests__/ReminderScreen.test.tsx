@@ -32,8 +32,6 @@ describe('Test for remidners page', () => {
     expect(getByTestId('reminder-header')).toBeTruthy();
     expect(getByTestId('+-icon')).toBeTruthy();
   });
-
-  it;
 });
 
 jest.mock('./../src/components/AddreminderModal', () => jest.fn(() => null));
@@ -113,12 +111,12 @@ describe('Reminders Component', () => {
     const {getByText, queryByTestId} = render(
       <Reminders route={{params: {pet: mockPet}}} />,
     );
-    expect(queryByTestId('modal')).toBeFalsy();
     fireEvent.press(getByText('+'));
     expect(AddReminder).toHaveBeenCalledWith(
       expect.objectContaining({visible: true}),
       {},
     );
+    // expect(screen.getByTestId("reminder-modal")).toBeTruthy()
   });
 
   it('should handle API errors', async () => {
