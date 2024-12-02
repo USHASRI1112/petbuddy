@@ -26,7 +26,7 @@ const Track = ({
       transparent={true}
       onRequestClose={closeFn}
      >
-      <TouchableWithoutFeedback onPress={closeFn}>
+      <TouchableWithoutFeedback onPress={closeFn} testID='track-modal'>
         <View style={styles.container}>
           <View style={styles.subContainer}>
             <TouchableOpacity style={styles.type} onPress={()=>{closeFn();navigation.navigate('Activity',{pet})}}>
