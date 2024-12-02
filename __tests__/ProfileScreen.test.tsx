@@ -1,5 +1,5 @@
 import React from 'react';
-import {render, fireEvent, waitFor} from '@testing-library/react-native';
+import {render, fireEvent, waitFor, screen} from '@testing-library/react-native';
 import Profile from '../src/screens/Profile/ProfileScreen';
 import {UserContext} from '../src/Context/Context';
 import {NavigationContainer} from '@react-navigation/native';
@@ -183,6 +183,29 @@ describe('Test for profile Screen', () => {
       expect(getByTestId('add-pet-modal')).toBeTruthy();
     });
   });
+  // it('should toggle Add Pet modal visibility when Add Pet is clicked', async () => {
+  //   const setUser = jest.fn();
+
+  //   const {getByTestId, queryByTestId} = render(
+  //     <NavigationContainer>
+  //       <UserContext.Provider value={{user, setUser}}>
+  //         <Profile navigation={{setOptions: jest.fn(), navigate: jest.fn()}} />
+  //       </UserContext.Provider>
+  //     </NavigationContainer>,
+  //   );
+  //   const addPetButton = getByTestId('add-pet-modal');
+  //   fireEvent.press(addPetButton);
+  //   await waitFor(() => {
+  //     expect(screen.getByText("Enter Pet Details")).toBeTruthy()
+  //     expect(getByTestId('pet-modal')).not.toBeNull();
+  //   });
+  //   // expect(getByTestId('pet-modal')).not.toBeNull();
+  //   // const closeModalButton = getByTestId('close-modal');
+  //   // fireEvent.press(closeModalButton);
+
+  //   // // Ensure AddPetModal is no longer visible
+  //   // expect(queryByTestId('add-pet-modal')).toBeNull();
+  // });
 });
 
 describe('Test for adding profile image', () => {
