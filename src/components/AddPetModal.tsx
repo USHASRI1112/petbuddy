@@ -94,8 +94,8 @@ const AddPetModal = ({visible, closeFn,username}: {visible: boolean; closeFn: an
       visible={visible}
       transparent={true}
       onRequestClose={closeFn}>
-      <TouchableWithoutFeedback testID="close-modal" onPress={closeFn}>
-        <View style={styles.container}>
+      <TouchableWithoutFeedback   onPress={closeFn}>
+        <View style={styles.container} testID="pet-modal">
           <Text style={styles.header}>Enter Pet Details</Text>
           <TouchableOpacity style={styles.imageContainer} onPress={()=>handleImage()}>
             {!photo?
