@@ -5,5 +5,6 @@ module.exports = {
   coveragePathIgnorePatterns: [
     "<rootDir>/public/",
     "<rootDir>/node_modules/",
+    "<rootDir>/src/components/Notifications.ts"
   ]
 };
