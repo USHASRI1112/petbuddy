@@ -135,8 +135,8 @@ const Profile = ({navigation}: {navigation: any}) => {
               🐾 My Pets
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity testID="add-pet-modal">
-            <Text style={styles.info} onPress={() => setIsVisible(!isVisible)}>
+          <TouchableOpacity testID="add-pet-modal" onPress={() => setIsVisible(!isVisible)}>
+            <Text style={styles.info} >
               🐾 Add Pet
             </Text>
           </TouchableOpacity>
@@ -145,7 +145,7 @@ const Profile = ({navigation}: {navigation: any}) => {
           visible={isVisible}
           closeFn={onHandleClose}
           username={user.name}
-        />
+        ></AddPetModal>
       </View>
     </View>
   );
