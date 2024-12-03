@@ -43,15 +43,6 @@ export async function scheduleNotification(
 ) {
   try {
     let next = null;
-    const maxSchedule = 3; 
-    if (!reminderData.scheduleCount) {
-      reminderData.scheduleCount = 0;
-    }
-    if (reminderData.scheduleCount >= maxSchedule) {
-      return;
-    }
-    reminderData.scheduleCount++;
-
     if (reminderData.type === 'Monthly') {
       const currentDate = new Date(triggerTime);
       const nextMonthDate = new Date(
