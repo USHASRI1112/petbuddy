@@ -3,9 +3,7 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   Image,
-  Platform,
   TextInput,
   TouchableOpacity,
   Alert,
@@ -196,7 +194,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     width: 500,
     textAlign: 'center',
-    alignSelf:'center'
+    alignSelf: 'center',
   },
 });
 
