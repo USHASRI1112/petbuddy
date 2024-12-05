@@ -24,6 +24,7 @@ const Register = ({navigation}: {navigation: any}) => {
     try {
       if (password != confirmPassword) {
         Alert.alert('Pasword and confirm password mismatch');
+        return;
       }
       const response = await fetch(`${API_URL}users`, {
         method: 'POST',
