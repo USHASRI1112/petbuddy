@@ -12,7 +12,7 @@ const Main = ({navigation}:{navigation:any}) => {
   return (
     <ImageBackground
       testID="image-background"
-      source={require('../../../public/assets/Home/dog.png')}
+      source={require('../../../public/assets/Home/dog.jpg')}
       style={styles.container}
       >
       <View style={styles.bottomContainer}>
