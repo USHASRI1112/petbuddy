@@ -1,11 +1,11 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import notifee, {
-  TimestampTrigger,
-  TriggerType,
   AndroidImportance,
   EventType,
   RepeatFrequency,
+  TimestampTrigger,
+  TriggerType,
 } from '@notifee/react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {API_URL} from '../../API';
 
 export async function setupNotificationChannel() {
