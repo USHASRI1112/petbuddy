@@ -75,7 +75,7 @@ const PetScreen = ({navigation, route}: {navigation: any; route: any}) => {
           <Image
             testID="no-dog-image"
             style={styles.dogImage}
-            source={require('./../../../public/assets/Home/dog.png')
+            source={require('./../../../public/assets/Home/dog.jpg')
             }></Image>
         ) : (
           <Image
