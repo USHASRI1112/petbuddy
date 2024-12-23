@@ -1,4 +1,4 @@
-import Tile from "../src/components/Tile";
+import {Tile} from "../src/components/Tile";
 import { render, screen } from '@testing-library/react-native';
 import {NavigationContainer} from '@react-navigation/native';
 

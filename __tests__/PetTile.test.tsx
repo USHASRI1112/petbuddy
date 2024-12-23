@@ -1,4 +1,4 @@
-import Pet from '../src/components/PetTile';
+import {Pet} from '../src/components/PetTile';
 import Home from '../src/screens/Home/HomeScreen';
 import {fireEvent, render, screen} from '@testing-library/react-native';
 

@@ -1,6 +1,6 @@
 import {Alert} from 'react-native';
 import {API_URL} from '../API';
-import AddPetModal from '../src/components/AddPetModal';
+import {AddPetModal} from '../src/components/AddPetModal';
 import {fireEvent, render, waitFor} from '@testing-library/react-native';
 import * as Permissions from './../src/components/Permissions'
 import ImageCropPicker from 'react-native-image-crop-picker';

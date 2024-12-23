@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import Track from '../src/components/TrackModal';
+import {Track} from '../src/components/TrackModal';
 
 describe('Track Component', () => {
   const mockNavigation = {
