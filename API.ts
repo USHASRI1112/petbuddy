@@ -1,2 +1,1 @@
-import { Platform } from "react-native"
 export const API_URL = `https://petbuddy-backend-4.onrender.com/api/`
