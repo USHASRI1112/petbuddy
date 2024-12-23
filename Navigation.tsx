@@ -1,22 +1,21 @@
-import React, {useContext, useEffect, useState} from 'react';
-
+import React, {useContext, useEffect} from 'react';
+import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Main from './src/screens/Main/MainScreen';
-import Login from './src/screens/Login/LoginScreen';
-import Register from './src/screens/Register/RegisterScreen';
-import Home from './src/screens/Home/HomeScreen';
-import Services from './src/tabs/Services/ServiceTab';
-import Training from './src/tabs/Training/TrainingTab';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Activity from './src/screens/Activity/ActivityScreen';
-import Reminders from './src/screens/Reminders/ReminderScreen';
+import GalleryScreen from './src/screens/Gallery/GalleryScreen';
+import Home from './src/screens/Home/HomeScreen';
+import Loader from './src/screens/Loader/LoaderScreen';
+import Login from './src/screens/Login/LoginScreen';
 import PetScreen from './src/screens/PetScreen/PetScreen';
 import Profile from './src/screens/Profile/ProfileScreen';
-import GalleryScreen from './src/screens/Gallery/GalleryScreen';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Register from './src/screens/Register/RegisterScreen';
+import Reminders from './src/screens/Reminders/ReminderScreen';
+import Services from './src/tabs/Services/ServiceTab';
+import Training from './src/tabs/Training/TrainingTab';
+import Main from './src/screens/Main/MainScreen';
 import {UserContext} from './src/Context/Context';
-import Loader from './src/screens/Loader/LoaderScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -112,10 +111,12 @@ export function TabNavigator({
                 alignItems: 'center',
                 marginLeft: 10,
               }}
-              onPress={() => navigation.reset({
-                index: 0,
-                routes: [{ name: 'Home' }],
-              })}>
+              onPress={() =>
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'Home'}],
+                })
+              }>
               <Text>{'<'}</Text>
             </TouchableOpacity>
           ),
@@ -136,10 +137,12 @@ export function TabNavigator({
                 alignItems: 'center',
                 marginLeft: 10,
               }}
-              onPress={() => navigation.reset({
-                index: 0,
-                routes: [{ name: 'Home' }],
-              })}>
+              onPress={() =>
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'Home'}],
+                })
+              }>
               <Text>{'<'}</Text>
             </TouchableOpacity>
           ),
