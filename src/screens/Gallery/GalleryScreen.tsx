@@ -1,42 +1,42 @@
 import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
   Alert,
-  Image,
   FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {requestPhotoLibraryPermission} from '../../components/Permissions';
-import ImageCropPicker from 'react-native-image-crop-picker';
 import RNFS from 'react-native-fs';
+import ImageCropPicker from 'react-native-image-crop-picker';
 import {API_URL} from '../../../API';
+import {requestPhotoLibraryPermission} from '../../components/Permissions';
+import {styles} from './GalleryScreen.styles';
 
 const GalleryScreen = ({route}: {route: any}) => {
   const {pet} = route.params;
   const [photo, setPhoto] = useState('');
   const [gallery, setGallery] = useState([]);
 
-  const updatePic = async (path:string) => {
-      try {
-        const response = await fetch(`${API_URL}pets/gallery/${pet.name}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({"path": path}),
-        });
-        console.log(response);
-        if (response.status === 200) {
-          Alert.alert('Pic uploaded succesffully');
-          fetchImages();
-        } else {
-          Alert.alert('Something went wrong, Try again later');
-        }
-      } catch (e) {
-        Alert.alert(`${e}`);
+  const updatePic = async (path: string) => {
+    try {
+      const response = await fetch(`${API_URL}pets/gallery/${pet.name}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({path: path}),
+      });
+      console.log(response);
+      if (response.status === 200) {
+        Alert.alert('Pic uploaded succesffully');
+        fetchImages();
+      } else {
+        Alert.alert('Something went wrong, Try again later');
       }
+    } catch (e) {
+      Alert.alert(`${e}`);
+    }
   };
 
   const fetchImages = async () => {
@@ -100,47 +100,11 @@ const GalleryScreen = ({route}: {route: any}) => {
         <Text>No Images Found. Please Add</Text>
       )}
 
-      <TouchableOpacity  style={styles.button} onPress={() => handleImage()}>
+      <TouchableOpacity style={styles.button} onPress={() => handleImage()}>
         <Text style={styles.buttonText}>Add Image</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    height: 150,
-    width: 150,
-    resizeMode: 'stretch',
-    margin: 10,
-    borderRadius: 10,
-  },
-  scroll: {
-    flexDirection: 'row',
-    alignContent: 'center',
-    gap: 20,
-    flexWrap: 'wrap',
-    marginTop: 20,
-  },
-  imageContainer: {
-    alignItems: 'center',
-  },
-  button: {
-    backgroundColor: 'forestgreen',
-    padding: 12,
-    borderRadius: 8,
-    marginVertical: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
 
 export default GalleryScreen;
