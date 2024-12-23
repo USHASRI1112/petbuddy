@@ -9,7 +9,7 @@ describe("Test for URL", () => {
         }));
         
         const { API_URL } = require("../API");
-        expect(API_URL).toBe(`http://10.0.2.2:5050/api/`);
+        expect(API_URL).toBe(`https://petbuddy-backend-4.onrender.com/api/`);
     });
 
     it("should be correct for ios", () => {
@@ -18,6 +18,6 @@ describe("Test for URL", () => {
         }));
         
         const { API_URL } = require("../API");
-        expect(API_URL).toBe(`http://localhost:5050/api/`);
+        expect(API_URL).toBe(`https://petbuddy-backend-4.onrender.com/api/`);
     });
 });
