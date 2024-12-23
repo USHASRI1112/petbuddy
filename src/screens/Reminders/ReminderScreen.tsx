@@ -1,14 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
-import AddreminderModal from '../../components/AddreminderModal';
-import {API_URL} from '../../../API';
+import React, { useEffect, useState } from 'react';
+import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { API_URL } from '../../../API';
+import {AddReminder} from '../../components/AddreminderModal';
+import { styles } from './ReminderScreen.styles';
 
 const Reminders = ({route}: {route: any}) => {
   const {pet} = route.params;
@@ -32,8 +26,8 @@ const Reminders = ({route}: {route: any}) => {
   function formatTimeRange(startTimeString: any, endTimeString: any): string {
     const formatTime = (dateString: string) => {
       const date = new Date(dateString);
-      const hours = date.getUTCHours(); 
-      const minutes = date.getUTCMinutes().toString().padStart(2, '0');; 
+      const hours = date.getUTCHours();
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
       const period = hours >= 12 ? 'PM' : 'AM';
       const formattedTime = `${hours % 12 || 12}:${minutes} ${period}`;
 
@@ -50,7 +44,7 @@ const Reminders = ({route}: {route: any}) => {
         const data = await response.json();
         const finaldata = data.filter((item: any) => item.type === current);
         setReminders(finaldata);
-      } 
+      }
     } catch (e) {
       console.log('Error fetching data');
     }
@@ -76,19 +70,20 @@ const Reminders = ({route}: {route: any}) => {
       </View>
       <View style={styles.typesDisplay}>
         <TouchableOpacity
-        testID="daily-type" 
+          testID="daily-type"
           style={current === 'Daily' ? styles.selectedType : styles.type}
           onPress={() => setCurrent('Daily')}>
           <Text>Daily</Text>
         </TouchableOpacity>
         <TouchableOpacity
-        testID="weekly-type" 
+          testID="weekly-type"
           style={current === 'Weekly' ? styles.selectedType : styles.type}
           onPress={() => setCurrent('Weekly')}>
           <Text>Weekly</Text>
         </TouchableOpacity>
         <TouchableOpacity
-         testID="monthly-type" style={current === 'Monthly' ? styles.selectedType : styles.type}
+          testID="monthly-type"
+          style={current === 'Monthly' ? styles.selectedType : styles.type}
           onPress={() => setCurrent('Monthly')}>
           <Text>Monthly</Text>
         </TouchableOpacity>
@@ -124,86 +119,9 @@ const Reminders = ({route}: {route: any}) => {
           +
         </Text>
       </TouchableOpacity>
-      <AddreminderModal visible={isVisible} closeFn={onHandleClose} pet={pet} />
+      <AddReminder visible={isVisible} closeFn={onHandleClose} pet={pet} />
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: '5%',
-    backgroundColor: 'white',
-    padding: 10,
-    borderRadius: 10,
-  },
-  topSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  reminderText: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: 'black',
-  },
-  add: {
-    color: 'white',
-    fontWeight: '700',
-    fontSize: 25,
-  },
-  bottomSection: {
-    alignSelf: 'flex-end',
-    backgroundColor: 'lightgreen',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 10,
-  },
-  image: {
-    height: 25,
-    width: 25,
-    resizeMode: 'stretch',
-    borderRadius: 10,
-  },
-  typesDisplay: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
-    marginTop: 20,
-  },
-  type: {
-    padding: 10,
-    backgroundColor: 'lightgreen',
-    borderRadius: 10,
-  },
-  reminders: {
-    marginHorizontal: '4%',
-    marginVertical: '5%',
-  },
-  reminderContent: {
-    flexDirection: 'row',
-    padding: 10,
-    alignItems: 'center',
-    gap: 10,
-  },
-  nodata: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  reminderInfo: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-    gap: 5,
-  },
-  reminderTitle: {
-    fontWeight: 'bold',
-    fontSize: 12,
-  },
-  selectedType: {
-    padding: 10,
-    backgroundColor: 'forestgreen',
-    borderRadius: 10,
-  },
-});
 
 export default Reminders;
