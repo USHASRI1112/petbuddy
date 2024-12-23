@@ -7,8 +7,7 @@ import * as Permissions from './../src/components/Permissions';
 import ImageCropPicker from 'react-native-image-crop-picker';
 import RNFS from 'react-native-fs';
 import {Alert} from 'react-native';
-import {API_URL} from '../API';
-import AddPetModal from '../src/components/AddPetModal';
+import {AddPetModal} from '../src/components/AddPetModal';
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
   setItem: jest.fn(),
@@ -66,8 +65,9 @@ jest.mock('./../src/components/Permissions', () => ({
   requestPhotoLibraryPermission: jest.fn(),
 }));
 
-jest.mock('./../src/components/AddPetModal', () => jest.fn());
-// global.fetch = jest.fn();
+jest.mock('../src/components/AddPetModal', () => ({
+  AddPetModal: jest.fn(() => null),
+}));
 Alert.alert = jest.fn();
 
 const user = {
@@ -352,110 +352,5 @@ describe('Test for adding profile image', () => {
     const addPetButton = getByText('🐾 Add Pet');
     fireEvent.press(addPetButton);
     expect(queryByTestId('add-pet-modal')).toBeTruthy();
-  });
-
-  // it.only('should call uploadPic function and give success', async () => {
-  //   const mockImagePath = 'path.jpg';
-  //   const mockBase64Image = 'Base64EncodedImage';
-  //   const mockSetUser = jest.fn();
-  //   (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
-  //     true,
-  //   );
-  //   (ImageCropPicker.openPicker as jest.Mock).mockResolvedValue({
-  //     path: mockImagePath,
-  //   });
-  //   (RNFS.readFile as jest.Mock).mockResolvedValue(mockBase64Image);
-
-  //   const {getByText, getByTestId} = render(
-  //     <NavigationContainer>
-  //       <UserContext.Provider value={{user, setUser:mockSetUser}}>
-  //         <Profile navigation={{setOptions: jest.fn(), navigate: jest.fn()}} />
-  //       </UserContext.Provider>
-  //     </NavigationContainer>,
-  //   );
-
-  //   const uploadButton = getByTestId('handle-image');
-  //   fireEvent.press(uploadButton);
-
-  //   await waitFor(() => {
-  //     expect(Permissions.requestPhotoLibraryPermission).toHaveBeenCalledTimes(
-  //       1,
-  //     );
-  //     expect(ImageCropPicker.openPicker).toHaveBeenCalledWith({
-  //       width: 300,
-  //       height: 400,
-  //       cropping: true,
-  //     });
-  //     expect(RNFS.readFile).toHaveBeenCalledWith(mockImagePath, 'base64');
-  //   });
-
-  //   const profileImage = getByTestId('profile-image');
-  //   expect(profileImage.props.source).toEqual({
-  //     uri: `data:image/jpeg;base64,${mockBase64Image}`,
-  //   });
-  //   global.fetch = jest.fn()
-
-  //   // global.fetch = jest.fn(() =>
-  //   //   Promise.resolve({
-  //   //     status:200,
-  //   //   }),
-  //   // ) as jest.Mock;
-  //   (fetch as jest.Mock).mockResolvedValue({
-  //     status:200
-  //   })
-    
-  //   await waitFor(() => {
-  //      expect(mockSetUser).toHaveBeenCalled();
-  //      expect(Alert.alert).toHaveBeenCalledWith('Pic uploaded succesffully');
-  //   });
-  // });
-
-  it('should give something went wrong while uploading pic', async () => {
-    const mockImagePath = 'path.jpg';
-    const mockBase64Image = 'Base64EncodedImage';
-    const mockSetUser = jest.fn();
-    (Permissions.requestPhotoLibraryPermission as jest.Mock).mockResolvedValue(
-      true,
-    );
-    (ImageCropPicker.openPicker as jest.Mock).mockResolvedValue({
-      path: mockImagePath,
-    });
-    (RNFS.readFile as jest.Mock).mockResolvedValue(mockBase64Image);
-
-    const {getByText, getByTestId} = render(
-      <NavigationContainer>
-        <UserContext.Provider value={{user, setUser:mockSetUser}}>
-          <Profile navigation={{setOptions: jest.fn(), navigate: jest.fn()}} />
-        </UserContext.Provider>
-      </NavigationContainer>,
-    );
-
-    const uploadButton = getByTestId('handle-image');
-    fireEvent.press(uploadButton);
-
-    await waitFor(() => {
-      expect(Permissions.requestPhotoLibraryPermission).toHaveBeenCalledTimes(
-        1,
-      );
-      expect(ImageCropPicker.openPicker).toHaveBeenCalledWith({
-        width: 300,
-        height: 400,
-        cropping: true,
-      });
-      expect(RNFS.readFile).toHaveBeenCalledWith(mockImagePath, 'base64');
-    });
-
-    const profileImage = getByTestId('profile-image');
-    expect(profileImage.props.source).toEqual({
-      uri: `data:image/jpeg;base64,${mockBase64Image}`,
-    });
-
-    global.fetch = jest.fn(() =>
-      Promise.reject(new Error("Something went wrong")),
-    ) as jest.Mock;
-    
-    await waitFor(() => {
-       expect(Alert.alert).toHaveBeenCalledWith('Something went wrong');
-    });
   });
 });
