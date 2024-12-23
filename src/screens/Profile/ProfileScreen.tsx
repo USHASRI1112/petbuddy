@@ -1,21 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Platform,
-  TouchableOpacity,
-  Alert,
-  Dimensions,
-} from 'react-native';
-import {UserContext} from '../../Context/Context';
-import AddPetModal from '../../components/AddPetModal';
-import ImageCropPicker from 'react-native-image-crop-picker';
-import RNFS from 'react-native-fs';
-import {requestPhotoLibraryPermission} from '../../components/Permissions';
-import {API_URL} from '../../../API';
+import {Alert, Image, Text, TouchableOpacity, View} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFS from 'react-native-fs';
+import ImageCropPicker from 'react-native-image-crop-picker';
+import {AddPetModal} from '../../components/AddPetModal';
+import {API_URL} from '../../../API';
+import {requestPhotoLibraryPermission} from '../../components/Permissions';
+import {styles} from './ProfileScreen.styles';
+import {UserContext} from '../../Context/Context';
 
 const Profile = ({navigation}: {navigation: any}) => {
   const userContext = useContext(UserContext);
@@ -98,7 +90,7 @@ const Profile = ({navigation}: {navigation: any}) => {
   };
 
   return (
-    <View style={styles.container} testID='profile-container'>
+    <View style={styles.container} testID="profile-container">
       <TouchableOpacity testID="handle-image" onPress={() => handleImage()}>
         {user.image_uri ? (
           <Image
@@ -135,68 +127,19 @@ const Profile = ({navigation}: {navigation: any}) => {
               🐾 My Pets
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity testID="add-pet-modal" onPress={() => setIsVisible(!isVisible)}>
-            <Text style={styles.info} >
-              🐾 Add Pet
-            </Text>
+          <TouchableOpacity
+            testID="add-pet-modal"
+            onPress={() => setIsVisible(!isVisible)}>
+            <Text style={styles.info}>🐾 Add Pet</Text>
           </TouchableOpacity>
         </View>
         <AddPetModal
           visible={isVisible}
           closeFn={onHandleClose}
-          username={user.name}
-        ></AddPetModal>
+          username={user.name}></AddPetModal>
       </View>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  image: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height / 2.2,
-    resizeMode: 'stretch',
-  },
-  subContainer: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    gap: 10,
-    marginHorizontal: '15%',
-    marginTop: '5%',
-    backgroundColor: 'white',
-    elevation: 10,
-    shadowColor: 'gray',
-    shadowOpacity: 1,
-    paddingVertical: 10,
-    paddingHorizontal: 25,
-    borderRadius: 10,
-  },
-  userName: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  emailContact: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    gap: 15,
-  },
-  nameText: {
-    color: 'black',
-    fontWeight: '900',
-    fontSize: 20,
-  },
-  signOutText: {
-    color: 'red',
-    fontSize: 14,
-  },
-  info: {
-    color: 'black',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-});
 
 export default Profile;
