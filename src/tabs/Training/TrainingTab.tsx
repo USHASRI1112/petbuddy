@@ -17,7 +17,7 @@ const Training = () => {
     <ScrollView style={styles.container}>
       <View style={styles.heroSection}>
         <Image
-          source={require('./../../../public/assets/Home/training.png')}
+          source={require('./../../../public/assets/Home/training.jpg')}
           style={styles.heroImage}
         />
         <Text style={styles.heroTitle}>Pet Training Essentials</Text>
