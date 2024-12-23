@@ -6,7 +6,6 @@ import {fetchAndScheduleReminders, setupNotificationChannel } from './src/compon
 
 function App(): React.JSX.Element {
   useEffect(()=>{
-    // setupNotificationChannel(),
     fetchAndScheduleReminders();
   },[])
   return (
