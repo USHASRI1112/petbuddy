@@ -51,7 +51,7 @@ export function TabNavigator({
           let iconSource;
           switch (route.name) {
             case 'HomeScreen':
-              iconSource = require('./public/assets/Tabs/homefilled.png');
+              iconSource = require('./public/assets/Tabs/home.jpg');
               break;
             case 'Services':
               iconSource = require('./public/assets/Tabs/services.jpg');
