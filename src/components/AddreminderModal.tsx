@@ -1,16 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  Modal,
-  TouchableOpacity,
-  TextInput,
   Alert,
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import {API_URL} from '../../API';
-import { fetchAndScheduleReminders } from './Notifications';
+import {fetchAndScheduleReminders} from './Notifications';
 
 const AddReminder = ({
   visible,
@@ -53,10 +53,16 @@ const AddReminder = ({
 
   const handleAdd = async () => {
     try {
-      const utcStartTime = new Date(startTime.getTime() - startTime.getTimezoneOffset() * 60000).toISOString();
-      const utcEndTime = new Date(endTime.getTime() - endTime.getTimezoneOffset() * 60000).toISOString();
-      const utcDate = new Date(selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000).toISOString();
-  
+      const utcStartTime = new Date(
+        startTime.getTime() - startTime.getTimezoneOffset() * 60000,
+      ).toISOString();
+      const utcEndTime = new Date(
+        endTime.getTime() - endTime.getTimezoneOffset() * 60000,
+      ).toISOString();
+      const utcDate = new Date(
+        selectedDate.getTime() - selectedDate.getTimezoneOffset() * 60000,
+      ).toISOString();
+
       const response = await fetch(`${API_URL}pets/reminders/${pet.name}`, {
         method: 'POST',
         headers: {
@@ -64,16 +70,16 @@ const AddReminder = ({
         },
         body: JSON.stringify({
           title: activity,
-          startTime:utcStartTime,
-          endTime:utcEndTime,
+          startTime: utcStartTime,
+          endTime: utcEndTime,
           type: frequency,
           petName: pet.name,
           date: utcDate,
         }),
       });
       if (response.status === 201) {
-        console.log("sucess")
-        fetchAndScheduleReminders()
+        console.log('sucess');
+        fetchAndScheduleReminders();
         Alert.alert('Reminder created');
         setActivity('');
         setFrequency('Daily');
@@ -105,7 +111,9 @@ const AddReminder = ({
         <View style={styles.modalContent}>
           <View style={styles.content}>
             <View style={styles.titleHeader}>
-              <Text testID="add-reminder-text" style={styles.header}>Add Reminder</Text>
+              <Text testID="add-reminder-text" style={styles.header}>
+                Add Reminder
+              </Text>
               <Text onPress={closeFn} style={styles.close}>
                 X
               </Text>
@@ -118,7 +126,7 @@ const AddReminder = ({
                 onPress={() => setFrequency(option)}>
                 <View style={styles.viewText}>
                   <View
-                  testID={`${option}-type`}
+                    testID={`${option}-type`}
                     style={[
                       styles.radioButton,
                       frequency === option && styles.radioButtonSelected,
@@ -140,7 +148,7 @@ const AddReminder = ({
                   onDateChange={setSelectedDate}
                   style={styles.datePicker}
                   fadeToColor="white"
-                  testID='date-picker'
+                  testID="date-picker"
                 />
                 <TouchableOpacity
                   onPress={handleDateDone}
@@ -149,27 +157,29 @@ const AddReminder = ({
                 </TouchableOpacity>
               </View>
             )}
-            <Text testID="selected-date"style={styles.selectedDate}>
+            <Text testID="selected-date" style={styles.selectedDate}>
               Selected Date: {selectedDate.toLocaleDateString()}
             </Text>
             <TextInput
               style={styles.activityInput}
               value={activity}
-              testID='activity-input'
+              testID="activity-input"
               onChangeText={setActivity}
               placeholder="Enter Activity"
               placeholderTextColor="#b2b2b2"
             />
 
-            <Text testID="start-time" style={styles.label}>Start Time:</Text>
+            <Text testID="start-time" style={styles.label}>
+              Start Time:
+            </Text>
             <TouchableOpacity
-            testID='select-start-time'
+              testID="select-start-time"
               onPress={() => setShowStartTimePicker(!showStartTimePicker)}
               style={styles.timeContainer}>
               <Text style={styles.timeText}>{formattedStartTime}</Text>
             </TouchableOpacity>
             {showStartTimePicker && (
-              <TouchableOpacity testID='start-time-picker'>
+              <TouchableOpacity testID="start-time-picker">
                 <DatePicker
                   date={startTime}
                   onDateChange={setStartTime}
@@ -178,10 +188,9 @@ const AddReminder = ({
                   fadeToColor="white"
                   style={styles.datePicker}
                   is24hourSource="locale"
-                  
                 />
                 <TouchableOpacity
-                testID="startTimeDone"
+                  testID="startTimeDone"
                   onPress={handleStartTimeDone}
                   style={styles.doneButton}>
                   <Text style={styles.doneButtonText}>Done</Text>
@@ -189,15 +198,17 @@ const AddReminder = ({
               </TouchableOpacity>
             )}
 
-            <Text testID='end-time'style={styles.label}>End Time:</Text>
+            <Text testID="end-time" style={styles.label}>
+              End Time:
+            </Text>
             <TouchableOpacity
-            testID='select-end-time'
+              testID="select-end-time"
               onPress={() => setShowEndTimePicker(!showEndTimePicker)}
               style={styles.timeContainer}>
               <Text style={styles.timeText}>{formattedEndTime}</Text>
             </TouchableOpacity>
             {showEndTimePicker && (
-              <TouchableOpacity testID='end-time-picker'>
+              <TouchableOpacity testID="end-time-picker">
                 <DatePicker
                   date={endTime}
                   onDateChange={setEndTime}
@@ -208,7 +219,7 @@ const AddReminder = ({
                   is24hourSource="locale"
                 />
                 <TouchableOpacity
-                testID='endTimeDone'
+                  testID="endTimeDone"
                   onPress={handleEndTimeDone}
                   style={styles.doneButton}>
                   <Text style={styles.doneButtonText}>Done</Text>
@@ -216,7 +227,10 @@ const AddReminder = ({
               </TouchableOpacity>
             )}
 
-            <TouchableOpacity testID="add-button" onPress={handleAdd} style={styles.addButton}>
+            <TouchableOpacity
+              testID="add-button"
+              onPress={handleAdd}
+              style={styles.addButton}>
               <Text style={styles.addButtonText}>Add Reminder</Text>
             </TouchableOpacity>
           </View>
@@ -355,4 +369,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddReminder;
+export {AddReminder};
