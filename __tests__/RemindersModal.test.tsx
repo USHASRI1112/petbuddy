@@ -5,7 +5,7 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react-native';
-import AddReminder from '../src/components/AddreminderModal';
+import {AddReminder} from '../src/components/AddreminderModal';
 import {Alert} from 'react-native';
 
 jest.mock('react-native-date-picker', () => {
