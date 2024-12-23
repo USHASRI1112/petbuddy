@@ -16,7 +16,11 @@ const Tile = ({service}: {service: any}) => {
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <Image testID="service-image" style={styles.image} source={{uri: service.image_uri}} />
+        <Image
+          testID="service-image"
+          style={styles.image}
+          source={{uri: service.image_uri}}
+        />
         <View style={styles.details}>
           <Text style={styles.name}>{service.name}</Text>
           <Text style={styles.desig}>{service.designation}</Text>
@@ -57,16 +61,16 @@ const Tile = ({service}: {service: any}) => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    backgroundColor: '#fff', 
+    backgroundColor: '#fff',
     borderRadius: 15,
     padding: 20,
-    shadowColor: '#000', 
-    shadowOffset: { width: 0, height: 2 },
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
     marginBottom: 20,
-    alignSelf: 'center', 
+    alignSelf: 'center',
   },
   topSection: {
     flexDirection: 'row',
@@ -82,7 +86,7 @@ const styles = StyleSheet.create({
   details: {
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: 'flex-start', 
+    alignItems: 'flex-start',
   },
   name: {
     fontSize: 18,
@@ -96,13 +100,13 @@ const styles = StyleSheet.create({
   },
   topBottomSection: {
     flexDirection: 'row',
-    justifyContent: 'flex-start', 
+    justifyContent: 'flex-start',
     alignItems: 'center',
     gap: 5,
   },
   star: {
     fontSize: 18,
-    color: '#ffcc00', 
+    color: '#ffcc00',
   },
   ratings: {
     fontSize: 12,
@@ -112,7 +116,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-     marginVertical: 10,
+    marginVertical: 10,
   },
   experience: {
     fontSize: 14,
@@ -127,8 +131,8 @@ const styles = StyleSheet.create({
     color: '#555',
   },
   bottomPage: {
-    justifyContent: 'flex-start', 
-    alignItems: 'flex-start', 
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   bottomText: {
     fontSize: 12,
@@ -136,5 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-
-export default Tile;
+export {Tile};

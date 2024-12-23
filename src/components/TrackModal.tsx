@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
   Modal,
+  StyleSheet,
+  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
 
 const Track = ({
@@ -24,16 +24,25 @@ const Track = ({
       animationType="slide"
       visible={visible}
       transparent={true}
-      onRequestClose={closeFn}
-     >
-      <TouchableWithoutFeedback onPress={closeFn} testID='track-modal'>
+      onRequestClose={closeFn}>
+      <TouchableWithoutFeedback onPress={closeFn} testID="track-modal">
         <View style={styles.container}>
           <View style={styles.subContainer}>
-            <TouchableOpacity style={styles.type} onPress={()=>{closeFn();navigation.navigate('Activity',{pet})}}>
+            <TouchableOpacity
+              style={styles.type}
+              onPress={() => {
+                closeFn();
+                navigation.navigate('Activity', {pet});
+              }}>
               <Text style={styles.text}>Activity</Text>
               <Text>{'>'}</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.type} onPress={()=>{closeFn();navigation.navigate('Reminders',{pet})}}>
+            <TouchableOpacity
+              style={styles.type}
+              onPress={() => {
+                closeFn();
+                navigation.navigate('Reminders', {pet});
+              }}>
               <Text style={styles.text}>Reminders</Text>
               <Text>{'>'}</Text>
             </TouchableOpacity>
@@ -71,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Track;
+export {Track};
