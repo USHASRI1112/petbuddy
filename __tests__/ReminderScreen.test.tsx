@@ -2,8 +2,7 @@ import {render, screen} from '@testing-library/react-native';
 import Reminders from '../src/screens/Reminders/ReminderScreen';
 import React from 'react';
 import {fireEvent, waitFor, act} from '@testing-library/react-native';
-import AddReminder from '../src/components/AddreminderModal';
-import {API_URL} from '../API';
+import {AddReminder} from '../src/components/AddreminderModal';
 
 jest.mock('react-native-date-picker', () => {
   return {
@@ -34,7 +33,9 @@ describe('Test for remidners page', () => {
   });
 });
 
-jest.mock('./../src/components/AddreminderModal', () => jest.fn(() => null));
+jest.mock('../src/components/AddreminderModal', () => ({
+  AddReminder: jest.fn(() => null),
+}));
 
 describe('Reminders Component', () => {
   const mockPet = {
@@ -116,7 +117,6 @@ describe('Reminders Component', () => {
       expect.objectContaining({visible: true}),
       {},
     );
-    // expect(screen.getByTestId("reminder-modal")).toBeTruthy()
   });
 
   it('should handle API errors', async () => {
