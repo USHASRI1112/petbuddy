@@ -2,7 +2,6 @@ import { Alert, Linking, Platform } from 'react-native';
 import PetScreen from '../src/screens/PetScreen/PetScreen';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react-native';
 import * as Permissions from './../src/components/Permissions'
-import Track from '../src/components/TrackModal';
 
 jest.mock('react-native-permissions', () => ({
   check: jest.fn(() => Promise.resolve('granted')),
