@@ -4,10 +4,10 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 const stars = (n: number) => {
   let i = 0;
   let s = '';
-  for (i = 0; i < n; i++) {
+  for (i = 0; i < n-1; i++) {
     s += '⭑';
   }
-  for (i = n; i <= 5; i++) {
+  for (i = n; i <5; i++) {
     s += '⭒';
   }
   return s;
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     gap: 5,
   },
   star: {
-    fontSize: 18,
+    fontSize: 26,
     color: '#ffcc00',
   },
   ratings: {
