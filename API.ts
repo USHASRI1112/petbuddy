@@ -1,1 +1,1 @@
-export const API_URL = `https://petbuddy-backend-5.onrender.com/api/`
+export const API_URL = `https://petbuddy-backend-6.onrender.com/api/`
