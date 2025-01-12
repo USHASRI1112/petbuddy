@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   topImage: {
     resizeMode: 'stretch',
     height: 100,
-    width: 400,
+    width: '100%',
   },
   pawImg: {
     borderRadius: 50,
@@ -21,7 +21,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-evenly',
     gap: 40,
-    // alignItems: 'center',
   },
   petText: {
     color: 'forestgreen',
