@@ -9,11 +9,16 @@ import notifee, {
 import {API_URL} from '../../API';
 
 export async function setupNotificationChannel() {
-  await notifee.createChannel({
-    id: 'reminder-channel',
-    name: 'Reminders',
-    importance: AndroidImportance.HIGH,
-  });
+  const existingChannels = await notifee.getChannels();
+  const channelExists = existingChannels.some(channel => channel.id === 'reminder-channel');
+
+  if (!channelExists) {
+    await notifee.createChannel({
+      id: 'reminder-channel',
+      name: 'Reminders',
+      importance: AndroidImportance.HIGH,
+    });
+  }
 }
 
 const setCategoriesIOS = async () => {
@@ -141,6 +146,7 @@ export const fetchAndScheduleReminders = async () => {
         }
       });
     }
+    console.log("reminders set succesfully")
   } catch (error: any) {
     console.log(`Error fetching reminders: ${error.message}`);
   }
